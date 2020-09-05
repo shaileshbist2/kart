@@ -1,0 +1,158 @@
+<div class="wrapper">
+  <app-admin-header></app-admin-header>
+  <div class="content-wrapper">
+    <section class="content-header">
+      <h1>
+        VALIDATE DATA
+      </h1>
+    </section>
+    <section class="content">
+      <div class="row">
+        <div class="col-md-4 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-yellow">
+              <i class="fa fa-users"></i>
+            </span>
+            <div class="info-box-content">
+              <span class="info-box-text">
+                PEOPLE DATA / LEADS
+                <i (click)="refreshInfo()"
+                   [class]="faClass"
+                   style="cursor: pointer;"></i>
+              </span>
+              <span class="info-box-number">
+                {{totalPeopleData}}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon" style="background: #40a926; color: #fff;">
+              <i class="fa fa-envelope-o"></i>
+            </span>
+            <div class="info-box-content">
+              <span class="info-box-text">
+                VALID EMAILS
+                <i (click)="refreshInfo()"
+                   [class]="faClass"
+                   style="cursor: pointer;"></i>
+              </span>
+              <span class="info-box-number">
+                {{totalValidEmail}}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-danger" style="background: #d22929; color: #fff;">
+              <i class="fa fa-envelope-o"></i>
+            </span>
+            <div class="info-box-content">
+              <span class="info-box-text">
+                INVALID EMAILS
+                <i (click)="refreshInfo()"
+                   [class]="faClass"
+                   style="cursor: pointer;"></i>
+              </span>
+              <span class="info-box-number">
+                {{totalInvalidEmail}}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="box box-primary">
+        <div class="box-header with-border">
+          <h3 class="box-title">
+            <i class="fa fa-envelope"></i>
+            Validate Bulk Emails
+          </h3>
+        </div>
+        <div class="box-body">
+          <div class="col-md-12 col-sm-12" style="color: darkorange;">
+            {{emailValidateError}}
+          </div>
+          <div class="col-md-4 col-sm-4 form-group">
+            <label>Starts Row From</label>
+            <input type="number"
+                   [(ngModel)]="validate.start_row"
+                   class="form-control input-sm"
+                   placeholder="0"
+                   minlength="2"/>
+          </div>
+          <div class="col-md-4 col-sm-4 form-group">
+            <label>End Row To / range</label>
+            <input type="number"
+                   [(ngModel)]="validate.end_row"
+                   class="form-control input-sm"
+                   placeholder="10"
+                   minlength="2"/>
+          </div>
+          <div class="col-md-12 col-sm-12 form-group">
+            <button class="btn btn-primary btn-sm"
+                    (click)="startEmailValidateProcess_a()"
+                    [disabled]="isDisabledBtn1">
+              Start Scan Emails
+            </button>
+            <span *ngIf="loader1">
+              Please Wait... <img src="../../../../assets/images/mail.svg">
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="box box-primary">
+        <div class="box-header with-border">
+          <h3 class="box-title">
+            <i class="fa fa-envelope"></i>
+            Validate Single Email
+          </h3>
+        </div>
+        <div class="box-body">
+          <div class="col-md-12 col-sm-12"
+               style="color: darkorange;">
+            {{errorMsg}}
+          </div>
+          <div class="col-md-12 col-sm-12 form-group">
+            <label>Validate Single Emails or comma separated (abc@company.com,def@company.com)</label>
+            <input class="form-control input-sm"
+                   [(ngModel)]="commaSeparatedEmails"
+                   placeholder="abc@company.com,def@company.com"/>
+          </div>
+          <div class="col-md-12 col-sm-12">
+            <button class="btn btn-primary btn-sm"
+                    (click)="startEmailValidateCommaSeparatedProcess_a()"
+                    [disabled]="isDisabledBtn2">
+              Start Scan Emails
+            </button>
+            <span *ngIf="loader2">
+              Please Wait... <img src="../../../../assets/images/mail.svg"/>
+            </span>
+          </div>
+          <div class="col-md-12 col-sm-12 form-group" *ngIf="emailIdObj.length > 0">
+            <table class="table table-bordered dt-responsive table-hover display table-responsive"
+                   cellspacing="0"
+                   width="100%" style="font-size: 11px;">
+              <thead>
+              <tr>
+                <th>EMAIL ID</th>
+                <th>STATUS</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let data of emailIdObj">
+                <td>{{data.email_id}}</td>
+                <td [ngStyle]="{color: (data.is_valid === 1 ? 'green' : 'red')}">
+                  {{(data.is_valid === 1 ? 'Valid' : 'Invalid')}}
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <app-admin-footer></app-admin-footer>
+</div>

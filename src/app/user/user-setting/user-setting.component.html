@@ -1,0 +1,227 @@
+<app-user-header></app-user-header>
+
+<div class="panel-content">
+
+  <div class="container-fluid">
+    <div style="background:#fff; padding:10px; margin:10px 9px 10px 9px; border:1px solid #efefef; font-size:20px;">
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <i class="fa fa-gears"></i> PROFILE SETTING
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid" style="padding: 12px;" *ngIf="emailConfirmPanel">
+    <div class="col-md-12">
+      <div class="col-md-2 text-center">&nbsp;</div>
+      <div class="col-md-8 text-center">
+        <div class="alert alert-success col-md-12 successMsg" style="display: none;">
+          Please check your mailbox to confirm your email address!
+        </div>
+        <h4>Please confirm your email address first</h4>
+        <h5><a (click)="sendEmailConfirmationMail_user()" style="text-decoration: underline;">Or Resend email
+          confirmation
+          again</a></h5>
+      </div>
+      <div class="col-md-2 text-center">&nbsp;</div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div style="background:#fff; padding:10px; margin:10px 9px 5px 9px; border:1px solid #efefef; font-size:18px;">
+      <div class="row">
+        <div class="col-lg-11 col-md-11 col-sm-11 col-xs-12">PROFILE DETAILS</div>
+        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-12">
+          <button class="btn btn-default btn-sm" (click)="editBtn()">EDIT</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div style="background:#fff; padding:10px; margin:10px 9px 10px 9px; border:1px solid #efefef;" *ngIf="profileInfoView">
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <table class="table table-striped dt-responsive table-hover display table-responsive" width="50%">
+            <tr>
+              <th width="15%">Name</th>
+              <td>{{settingModel.first_name + ' ' + settingModel.last_name}}</td>
+            </tr>
+            <tr>
+              <th>Email</th>
+              <td>{{settingModel.email_id}}</td>
+            </tr>
+            <tr>
+              <th>Contact</th>
+              <td>{{settingModel.mobile_number}}</td>
+            </tr>
+            <tr>
+              <th>Address</th>
+              <td>{{settingModel.address}}</td>
+            </tr>
+            <tr>
+              <th>City</th>
+              <td>{{settingModel.city}}</td>
+            </tr>
+            <tr>
+              <th>Country</th>
+              <td>{{settingModel.country_name}}</td>
+            </tr>
+            <tr>
+              <th>State</th>
+              <td>{{settingModel.state_name}}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="container-fluid">
+    <div style="background:#fff; padding:10px; margin:10px 9px 10px 9px; border:1px solid #efefef;" *ngIf="editProfileView">
+      <div class="row">
+        <div class="col-lg-11 col-md-11 col-sm-11 col-xs-12">EDIT PROFILE</div>
+        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-12">
+          <button class="btn btn-default btn-sm pull-right" (click)="backBtn()">BACK</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+          <form novalidate #settingForm="ngForm" class="settingForm">
+            <div class="row">
+              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="form-group">
+                  <label>First Name</label>
+                  <input type="text"
+                         class="form-control text-capitalize"
+                         placeholder="First Name"
+                         #first_name="ngModel"
+                         [(ngModel)]="settingModel.first_name"
+                         name="first_name"
+                         required/>
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="form-group">
+                  <label>Last Name</label>
+                  <input type="text"
+                         class="form-control text-capitalize"
+                         placeholder="Last Name"
+                         #last_name="ngModel"
+                         [(ngModel)]="settingModel.last_name"
+                         name="last_name"
+                         required/>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="form-group">
+                  <label>Address</label>
+                  <input type="text"
+                         class="form-control"
+                         placeholder="Address"
+                         #address="ngModel"
+                         [(ngModel)]="settingModel.address"
+                         name="address"
+                         required/>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <div class="form-group">
+                  <label>City</label>
+                  <input type="text"
+                         class="form-control"
+                         placeholder="City"
+                         #city="ngModel"
+                         [(ngModel)]="settingModel.city"
+                         name="city"
+                         required/>
+                </div>
+              </div>
+              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <div class="form-group">
+                  <label>Country</label>
+                  <select class="form-control"
+                          (change)="getStateList_user($event.target.value)"
+                          #country="ngModel"
+                          [(ngModel)]="settingModel.country"
+                          name="country"
+                          required>
+                    <option value="undefined" disabled selected hidden>Select Country</option>
+                    <option value="null" disabled selected hidden>Select Country</option>
+                    <option *ngFor="let data of countryList"
+                            value="{{data.country_nameCode+'_'+data.country_code+'_'+data.nicename}}">
+                      {{data.nicename}}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <div class="form-group">
+                  <label>State</label>
+                  <select class="form-control"
+                          #state="ngModel"
+                          [(ngModel)]="settingModel.state"
+                          name="state"
+                          required>
+                    <option value="undefined" disabled selected hidden>Select State</option>
+                    <option value="null" disabled selected hidden>Select State</option>
+                    <option value="{{data.state_subdivision_code+'_'+data.state_subdivision_name}}"
+                            *ngFor="let data of stateList">
+                      {{data.state_subdivision_name}}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="form-group">
+                  <button class="btn btn-default"
+                          (click)="updateProfile_user(settingModel)"
+                          [disabled]="(settingForm.invalid)">
+                    Update Now
+                    <span style="color: green; display: none;" class="successMsg">updated successfully</span>
+                    <span style="color:red; font-size: 11px;">{{errorMsg}}</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12"></div>
+      </div>
+    </div>
+  </div>
+
+    <!--<div class="col-md-6">-->
+      <!--<h5>Name: <b class="text-capitalize">{{settingModel.first_name + ' ' + settingModel.last_name}}</b></h5>-->
+    <!--</div>-->
+    <!--<div class="col-md-6">-->
+      <!--<h5>Email: <b>{{settingModel.email_id}}</b></h5>-->
+    <!--</div>-->
+    <!--<div class="col-md-6">-->
+      <!--<h5>Contact: <b>{{settingModel.mobile_number}}</b></h5>-->
+    <!--</div>-->
+    <!--<div class="col-md-6">-->
+      <!--<h5>Address: <b>{{settingModel.address}}</b></h5>-->
+    <!--</div>-->
+    <!--<div class="col-md-6">-->
+      <!--<h5>City: <b>{{settingModel.city}}</b></h5>-->
+    <!--</div>-->
+    <!--<div class="col-md-6">-->
+      <!--<h5>Country: <b>{{settingModel.country_name}}</b></h5>-->
+    <!--</div>-->
+    <!--<div class="col-md-6">-->
+      <!--<h5>State: <b>{{settingModel.state_name}}</b></h5>-->
+    <!--</div>-->
+</div>
+<app-user-footer></app-user-footer>

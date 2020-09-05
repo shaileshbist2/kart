@@ -1,0 +1,47 @@
+<app-user-header></app-user-header>
+
+<div class="panel-content">
+  <div class="container-fluid">
+    <div style="background:#fff; padding:10px; margin:10px 9px 5px 9px; border:1px solid #efefef;">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="col-md-2 col-sm-2 col-xs-12" style="font-size:16px; padding-top:4px;">
+            <i class="fa fa-industry"></i>
+            TECHNOLOGY
+          </div>
+          <div class="col-md-6 col-sm-6 col-xs-6">
+            <input type="text"
+                   class="form-control input-sm"
+                   placeholder="Search your Technology"
+                   [(ngModel)]="searchInput"
+                   (ngModelChange)="this.inputType3.next($event)"/>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <form #f="ngForm" novalidate>
+            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+                   class="table dt-responsive table-hover display table-responsive" cellspacing="0"
+                   width="100%" style="font-size: 11px;">
+              <thead>
+              <tr>
+                <th width="20%">COMPANY</th>
+                <th width="20%">TECHNOLOGY USED</th>
+                <th>UPDATED</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let comp of company" style="cursor: pointer;" (click)="goToDetails(comp.comp_name)">
+                <td class="text-capitalize">{{ comp.comp_name }}</td>
+                <td class="text-capitalize">{{ comp.comp_technology_used }}</td>
+                <td width="15%">{{comp.comp_updated_at}}</td>
+              </tr>
+              </tbody>
+            </table>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

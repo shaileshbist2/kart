@@ -1,0 +1,50 @@
+<div class="login-box">
+  <div class="login-logo">
+    <a routerLink="/login"><b>Admin</b>Login</a>
+  </div>
+  <!-- /.login-logo -->
+  <div class="login-box-body">
+    <p class="login-box-msg">Fill your detail to get in</p>
+
+    <form novalidate
+          #loginForm="ngForm"
+          class="loginForm">
+      <div class="row">
+        <div class="form-group col-md-12">
+          <span style="color:red;">{{errorMsg}}</span>
+          <input type="text"
+                 placeholder="Email"
+                 name="email_id"
+                 required
+                 class="form-control input-md"
+                 #email_id="ngModel"
+                 [(ngModel)]="loginModel.email_id"/>
+          <span *ngIf="email_id.invalid && (email_id.dirty || email_id.touched)"
+                class="error">
+            <span *ngIf="email_id?.errors.required">Email is required</span>
+          </span>
+        </div>
+        <div class="feild col-md-12 form-group">
+          <input type="password"
+                 placeholder="Password"
+                 name="password"
+                 required class="form-control input-md"
+                 #password="ngModel"
+                 [(ngModel)]="loginModel.password"/>
+          <span class="error"
+                *ngIf="password.invalid && (password.dirty || password.touched)">
+                                <span *ngIf="password?.errors.required">Password is required
+                                </span>
+                            </span>
+        </div>
+        <div class="feild col-md-12">
+          <input type="submit"
+                 value="Login Now"
+                 (click)="doLogin()"
+                 [disabled]="loginForm.invalid"
+                 class="btn btn-success"/>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

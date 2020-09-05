@@ -1,0 +1,512 @@
+<app-user-header [creditsDetails]="creditsDetails"></app-user-header>
+<!--<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '1px', size: '12px;' }"></ngx-loading>-->
+
+<div class="panel-content">
+  <div class="container-fluid">
+    <div style="background:#fff; padding:10px; margin:10px 9px 5px 9px; border:1px solid #efefef;">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="col-md-2 col-sm-2 col-xs-12" style="font-size:16px; padding-top:4px;"><i class="fa fa-users"></i>
+            PEOPLE SEARCH
+          </div>
+          <div class="col-md-2 col-sm-2 col-xs-12">
+            <div style="font-size:16px; padding-top:5px;">Total Records:
+              <strong [ngStyle]="{color: (totalRec < 50 ? 'red' : (totalRec < 1000 ? 'orange' : 'green'))}">
+                {{totalRec}}
+              </strong>
+            </div>
+          </div>
+          <div class="col-md-5 col-sm-5 col-xs-12">
+            <div class="input-group">
+                  <span class="input-group-addon">
+                    <select (change)="searchingByFunc($event.target.value)">
+                      <option value="default">Search by default</option>
+                      <option value="tech">Search by technology</option>
+                    </select>
+                  </span>
+              <input type="text"
+                     class="form-control input-sm"
+                     placeholder="Search your contacts here..."
+                     [(ngModel)]="searchInput"
+                     (ngModelChange)="this.inputType2.next($event)"/>
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-3 col-xs-12 form-group">
+            <div class="btn-group">
+              <button type="button" class="btn btn-success btn-sm" (click)="resetSearch()">
+                Reset
+              </button>
+              <button type="button" class="btn btn-primary btn-sm"
+                      (click)="lgModal2.show();">
+                <i class="fa fa-filter"></i>
+                Search By Filter
+              </button>
+              <button type="button" class="btn btn-primary btn-sm"
+                      *ngIf="(selectedFilterObj.country.length > 0) ||
+                              (selectedFilterObj.state.length > 0) ||
+                              (selectedFilterObj.industry.length > 0) ||
+                              (selectedFilterObj.domain.length > 0) ||
+                              (selectedFilterObj.department.length > 0) ||
+                              (selectedFilterObj.revenue.length > 0) ||
+                              (selectedFilterObj.management_level.length > 0)"
+                      (click)="this.filter_view = !this.filter_view">
+                <i class="fa fa-eye"></i>
+              </button>
+            </div>
+          </div>
+          <div class="col-md-12 col-sm-12 col-xs-12 form-group"
+               style="font-size: 10px!important;"
+               *ngIf="filter_view">
+            <div class="col-md-12 col-sm-12 col-xs-12" *ngIf="selectedFilterObj.country.length > 0"
+                 style="background: #f9f9f9; padding: 5px;">
+              <div class="col-md-12 col-sm-12"><strong>COUNTRY</strong></div>
+              <div class="col-md-1 col-sm-1"
+                   *ngFor="let data of selectedFilterObj.country">
+                <span class="label label-default">
+                  {{data.country_name}}
+                </span>
+              </div>
+            </div>
+            <div class="col-md-12 col-sm-12 col-xs-12" *ngIf="selectedFilterObj.state.length > 0"
+                 style="background: #f9f9f9; padding: 5px;">
+              <div class="col-md-12 col-sm-12"><strong>STATE</strong></div>
+              <div class="col-md-1 col-sm-1" *ngFor="let data of selectedFilterObj.state">
+                <span class="label label-default">
+                  {{data.state_name}}
+                </span>
+              </div>
+            </div>
+            <div class="col-md-12 col-sm-12 col-xs-12" *ngIf="selectedFilterObj.industry.length > 0"
+                 style="background: #f9f9f9; padding: 5px;">
+              <div class="col-md-12 col-sm-12"><strong>INDUSTRY</strong></div>
+              <div class="col-md-1 col-sm-1" *ngFor="let data of selectedFilterObj.industry">
+                <span class="label label-default">
+                  {{data.industry_name}}
+                </span>
+              </div>
+            </div>
+            <div class="col-md-12 col-sm-12 col-xs-12" *ngIf="selectedFilterObj.domain.length > 0"
+                 style="background: #f9f9f9; padding: 5px;">
+              <div class="col-md-12 col-sm-12"><strong>DOMAIN</strong></div>
+              <div class="col-md-1 col-sm-1" *ngFor="let data of selectedFilterObj.domain">
+                <span class="label label-default">
+                  {{data.domain_name}}
+                </span>
+              </div>
+            </div>
+            <div class="col-md-12 col-sm-12 col-xs-12" *ngIf="selectedFilterObj.department.length > 0"
+                 style="background: #f9f9f9; padding: 5px;">
+              <div class="col-md-12 col-sm-12"><strong>DEPARTMENT</strong></div>
+              <div class="col-md-1 col-sm-1" *ngFor="let data of selectedFilterObj.department">
+                <span class="label label-default">
+                  {{data.department_name}}
+                </span>
+              </div>
+            </div>
+            <div class="col-md-12 col-sm-12 col-xs-12" *ngIf="selectedFilterObj.revenue.length > 0"
+                 style="background: #f9f9f9; padding: 5px;">
+              <div class="col-md-12 col-sm-12"><strong>REVENUE</strong></div>
+              <div class="col-md-1 col-sm-1" *ngFor="let data of selectedFilterObj.revenue">
+                <span class="label label-default"
+                      style="margin-right: 2px;">
+                  {{data.revenue}}
+                </span>
+              </div>
+            </div>
+            <div class="col-md-12 col-sm-12 col-xs-12" *ngIf="selectedFilterObj.management_level.length > 0"
+                 style="background: #f9f9f9; padding: 5px;">
+              <div class="col-md-12 col-sm-12">
+                <strong>MANAGEMENT LEVEL</strong>
+              </div>
+              <div class="col-md-1 col-sm-1" *ngFor="let data of selectedFilterObj.management_level">
+                <span class="label label-default">
+                  {{data.management_level === 'Senior' ? 'Senior Level Decision Maker' : ''}}
+                  {{data.management_level === 'First' ? 'First Level Decision Maker' : ''}}
+                  {{data.management_level === 'Mid' ? 'Mid Level Decision Maker' : ''}}
+                  {{data.management_level === 'Other' ? 'Other' : ''}}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="card-new">
+            <div class="card-new-body">
+              <div *ngIf="getItView">
+                <button class="btn btn-default btn-xs" (click)="checkAuth(); purchaseSelectedContacts(f.valid);">
+                  Get Selected Contacts &nbsp;
+                  <i class="fa fa-spinner fa-spin"
+                     *ngIf="spinner"
+                     style="font-size: 10px;"></i>
+                </button>&nbsp;&nbsp;
+                <span style="color:#0b58a2;" *ngIf="errorMsgView">
+              Oh no! Looks like you don't have enough credits to search... Let's fix this!
+              <a routerLink="/user/price" class="btn btn-default btn-xs">YES</a>
+            </span>
+                <span style="color: green;">{{successMsg}}</span>
+              </div>
+              <form #f="ngForm" novalidate>
+                <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+                       class="table dt-responsive table-hover display table-responsive" cellspacing="0"
+                       width="100%" style="font-size: 11px;">
+                  <thead>
+                  <tr>
+                    <th style="width: 20px;">
+                      <label class="container2" for="allpersons">All
+                        <input type="checkbox"
+                               id="allpersons"
+                               name="allpersons"
+                               value="allpersons"
+                               [(ngModel)]="allpersons"
+                               (click)="toggleSelect($event)"/>
+                        <span class="checkmark2"></span>
+                      </label>
+                    </th>
+                    <th width="20%">NAME</th>
+                    <th width="20%">COMPANY</th>
+                    <th width="35%">DESIGNATION</th>
+                    <th>COUNTRY</th>
+                    <th>UPDATED</th>
+                    <th width="5%">VIEW</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr *ngFor="let person of persons"
+                      [ngStyle]="{background: person.is_viewed == 'true' ? '#d5efd3' : ''}">
+                    <td width="20">
+                      <label class="container2" for="{{person.people_data_id}}">
+                        <input type="checkbox"
+                               name="person_name[{{i}}]"
+                               [checked]="person.selected"
+                               value="neighbourhood.selected"
+                               id="{{person.people_data_id}}"
+                               (change)="(person.selected = !(person.selected)); checkAllSelectCheckbox(person.selected)"/>
+                        <span class="checkmark2"></span>
+                      </label>
+                    </td>
+                    <td>
+                      <!--<a style="text-decoration: underline;"-->
+                      <!--(click)="clickToContactPerson_user(person.people_data_id)">{{ person.full_name }}-->
+                      <!--</a>-->
+                      <a style="text-decoration: underline;"
+                         [ngStyle]="{color: person.is_viewed == 'true' ? '#000000' : ''}"
+                         (click)="lgModal.show(); getContactObjInfo(person); checkDataId(person); checkAuth();">
+                        {{ person.full_name }}
+                      </a>
+                    </td>
+                    <td>{{ person.company }}</td>
+                    <td>{{ person.designation_info }}</td>
+                    <td width="20%">{{ person.country_name }} ({{ person.state }})</td>
+                    <td width="15%">{{ person.updated_at }}</td>
+                    <td class="text-center">
+                      <button class="btn btn-default btn-xs"
+                              (click)="lgModal.show(); getContactObjInfo(person); checkDataId(person); checkAuth();">
+                        <i class="fa fa-info-circle" style="font-size: 13px; color:green;"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!----------------------------- FILTER MODAL ------------------------------------------------------->
+  <div bsModal #lgModal2="bs-modal" class="modal fade" tabindex="-1"
+       role="dialog" aria-labelledby="dialog-sizes-name1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header" style="background: #f9f9f9;">
+          <h4 class="modal-title pull-left">SEARCH BY FILTER
+            <strong [ngStyle]="{color: (totalRec < 50 ? 'red' : (totalRec < 1000 ? 'orange' : 'green'))}">
+              ({{totalRec}})
+            </strong>
+          </h4>
+          <button type="button" class="close pull-right" (click)="lgModal2.hide()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="col-md-6 col-sm-6 form-group">
+            <div class="col-md-12 col-sm-12 form-group">
+              <label>COUNTRY</label>
+              <angular2-multiselect [data]="country"
+                                    [(ngModel)]="selectedCountry"
+                                    [settings]="country_setting"
+                                    (onSelect)="onCountrySelect($event)"
+                                    (onDeSelect)="OnCountryDeSelect($event)"
+                                    (onSelectAll)="onSelectAllCountry($event)"
+                                    (onDeSelectAll)="onDeSelectAllCountry($event)">
+                <c-search>
+                  <ng-template>
+                    <input type="text"
+                           (keyup)="onSearchCountry($event.target.value)"
+                           placeholder="Search Country"
+                           style="border: none; width: 100%; height: 100%; outline: none;"/>
+                  </ng-template>
+                </c-search>
+                <c-item>
+                  <ng-template let-item="item">
+                    <label style="color: #333;width: 150px;">
+                      {{item.country_name}}
+                    </label>
+                  </ng-template>
+                </c-item>
+              </angular2-multiselect>
+            </div>
+            <div class="col-md-12 col-sm-12 form-group">
+              <label>STATE</label>
+              <angular2-multiselect [data]="state"
+                                    [(ngModel)]="selectedState"
+                                    [settings]="state_setting"
+                                    (onSelect)="onStateSelect($event)"
+                                    (onDeSelect)="OnStateDeSelect($event)"
+                                    (onSelectAll)="onSelectAllState($event)"
+                                    (onDeSelectAll)="onDeSelectAllState($event)">
+                <c-search>
+                  <ng-template>
+                    <input type="text"
+                           (keyup)="onSearchState($event.target.value)"
+                           placeholder="Search State"
+                           style="border: none; width: 100%; height: 100%; outline: none;"/>
+                  </ng-template>
+                </c-search>
+                <c-item>
+                  <ng-template let-item="item">
+                    <label style="color: #333;width: 150px;">
+                      {{item.state_name}}
+                    </label>
+                  </ng-template>
+                </c-item>
+              </angular2-multiselect>
+            </div>
+            <div class="col-md-12 col-sm-12 form-group">
+              <label>INDUSTRY</label>
+              <angular2-multiselect [data]="industry"
+                                    [(ngModel)]="selectedIndustry"
+                                    [settings]="industry_setting"
+                                    (onSelect)="onIndustrySelect($event)"
+                                    (onDeSelect)="OnIndustryDeSelect($event)"
+                                    (onSelectAll)="onSelectAllIndustry($event)"
+                                    (onDeSelectAll)="onDeSelectAllIndustry($event)">
+                <c-search>
+                  <ng-template>
+                    <input type="text"
+                           (keyup)="onSearchIndustry($event.target.value)"
+                           placeholder="Search Industry"
+                           style="border: none; width: 100%; height: 100%; outline: none;"/>
+                  </ng-template>
+                </c-search>
+                <c-item>
+                  <ng-template let-item="item">
+                    <label style="color: #333;width: 150px;">
+                      {{item.industry_name}}
+                    </label>
+                  </ng-template>
+                </c-item>
+              </angular2-multiselect>
+            </div>
+            <div class="col-md-12 col-sm-12 form-group">
+              <label>DOMAIN</label>
+              <angular2-multiselect [data]="domain"
+                                    [(ngModel)]="selectedDomain"
+                                    [settings]="domain_setting"
+                                    (onSelect)="onDomainSelect($event)"
+                                    (onDeSelect)="OnDomainDeSelect($event)"
+                                    (onSelectAll)="onSelectAllDomain($event)"
+                                    (onDeSelectAll)="onDeSelectAllDomain($event)">
+                <c-search>
+                  <ng-template>
+                    <input type="text"
+                           (keyup)="onSearchDomain($event.target.value)"
+                           placeholder="Search Domain"
+                           style="border: none; width: 100%; height: 100%; outline: none;"/>
+                  </ng-template>
+                </c-search>
+                <c-item>
+                  <ng-template let-item="item">
+                    <label style="color: #333;width: 150px;">
+                      {{item.domain_name}}
+                    </label>
+                  </ng-template>
+                </c-item>
+              </angular2-multiselect>
+            </div>
+            <div class="col-md-12 col-sm-12 form-group">
+              <label>DEPARTMENT</label>
+              <angular2-multiselect [data]="department"
+                                    [(ngModel)]="selectedDepartment"
+                                    [settings]="department_setting"
+                                    (onSelect)="onDepartmentSelect($event)"
+                                    (onDeSelect)="OnDepartmentDeSelect($event)"
+                                    (onSelectAll)="onSelectAllDepartment($event)"
+                                    (onDeSelectAll)="onDeSelectAllDepartment($event)">
+                <c-search>
+                  <ng-template>
+                    <input type="text"
+                           (keyup)="onSearchDepartment($event.target.value)"
+                           placeholder="Search Department"
+                           style="border: none; width: 100%; height: 100%; outline: none;"/>
+                  </ng-template>
+                </c-search>
+                <c-item>
+                  <ng-template let-item="item">
+                    <label style="color: #333;width: 150px;">
+                      {{item.department_name}}
+                    </label>
+                  </ng-template>
+                </c-item>
+              </angular2-multiselect>
+            </div>
+          </div>
+          <div class="col-md-6 col-sm-6 form-group">
+            <div class="col-md-12 col-sm-12 form-group">
+              <div class="col-md-12 col-sm-12" style="background: #f9f9f9;">
+                <div class="col-md-12 col-sm-12">
+                  <label>REVENUE</label>
+                </div>
+                <div class="row">&nbsp;</div>
+                <div class="col-md-6 col-sm-6" *ngFor="let rev of revenueArray">
+                  <label class="container1">
+                    <input type="checkbox"
+                           [(ngModel)]="rev.is_checked"
+                           [checked]="rev.is_checked"
+                           (click)="onSelectRevenue(rev.id, rev.revenue, $event.target.checked);"/>
+                    <strong>{{rev.revenue}}</strong>
+                    <span class="checkmark1"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 col-sm-12 form-group">
+              <div class="col-md-12 col-sm-12" style="background: #f9f9f9;">
+                <div class="col-md-12 col-sm-12">
+                  <label>MANAGEMENT LEVEL</label>
+                </div>
+                <div class="row">&nbsp;</div>
+                <div class="col-md-12 col-sm-12">
+                  <label class="container1" *ngFor="let ml of managementLevelArray">
+                    <input type="checkbox"
+                           [(ngModel)]="ml.is_checked"
+                           [checked]="ml.is_checked"
+                           (click)="onSelectManagementLevel(ml, $event.target.checked);"/>
+                    <strong>{{ml.management_level === 'Senior' ? 'Senior Level Decision Maker' : ''}}</strong>
+                    <strong>{{ml.management_level === 'First' ? 'First Level Decision Maker' : ''}}</strong>
+                    <strong>{{ml.management_level === 'Mid' ? 'Mid Level Decision Maker' : ''}}</strong>
+                    <strong>{{ml.management_level === 'Other' ? 'Other' : ''}}</strong>
+                    <span class="checkmark1"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">&nbsp;</div>
+        <div class="modal-footer">
+          <div class="btn-group">
+            <button type="button" class="btn btn-danger btn-sm" (click)="lgModal2.hide()">
+              Close
+            </button>
+            <button type="button" class="btn btn-success btn-sm" (click)="resetSearch()">
+              Reset
+            </button>
+            <button type="button" class="btn btn-primary btn-sm"
+                    (click)="getSelectedFilterObj(); lgModal2.hide();">
+              Search
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!----------------------------- CONTACT MODAL ------------------------------------------------------->
+  <div bsModal #lgModal="bs-modal" class="modal fade" tabindex="-1"
+       role="dialog" aria-labelledby="dialog-sizes-name1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header" style="background: #f9f9f9;">
+          <h4 id="dialog-sizes-name1" class="modal-title pull-left">
+            CONTACT PERSON - <span class="text-uppercase"
+                                   style="color: #174354;"><b>{{contactModel.full_name}}</b></span>
+          </h4>
+          <button type="button" class="close pull-right" (click)="lgModal.hide()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="col-md-6 form-group" style="font-size: 11px;">
+            <h4>{{contactModel.full_name}}</h4>
+            <h5>{{contactModel.designation_info}}</h5>
+            EMAIL: <b style="text-decoration: underline;">{{contactModel.email_id}}</b><br/>
+            CONTACT: <b>{{contactModel.contact_number}}</b><br/>
+            <span *ngIf="contactModel.linkedin !== 'N/A'">
+                LINKEDIN: <b><a [href]="contactModel.linkedin" target="_blank" style="text-decoration: underline;">{{contactModel.linkedin}}</a></b>
+              </span>
+          </div>
+          <div class="col-md-6 form-group text-right" style="font-size: 11px;">
+            <h5>{{contactModel.company}}</h5>
+            WEBSITE: <b>{{contactModel.company_website}}</b> <br/>
+            DEPARTMENT: <b>{{contactModel.department}}</b> <br/>
+            LOCATION: <b>{{contactModel.country}} ({{contactModel.state}})</b> <br/>
+            INDUSTRY: <b>{{contactModel.industry}}</b> <br/>
+            DOMAIN: <b>{{contactModel.domain}}</b> <br/>
+            COMPANY SIZE: <b>{{contactModel.company_size}}</b> <br/>
+          </div>
+        </div>
+        <div class="row">&nbsp;</div>
+        <span *ngIf="showCompanyDetail">
+            <div class="modal-header" style="background: #f9f9f9;">
+              <h4 id="" class="modal-title pull-left">
+                COMPANY - <span class="text-uppercase" style="color: #174354;"><b>{{companyModel.comp_name}}</b></span>
+              </h4>
+            </div>
+            <div class="modal-body" style="font-size: 11px;">
+              <div class="col-md-6 col-sm-6">
+                LOCATION: <b>{{companyModel.comp_location}}</b> <br/>
+                CITY: <b>{{companyModel.comp_city}}</b> <br/>
+                STATE: <b>{{companyModel.comp_state}}</b> <br/>
+                TECHNOLOGY USED: <b>{{companyModel.comp_technology_used}}</b>
+              </div>
+              <div class="col-md-6 col-sm-6 text-right">
+                  BUDGET <sup>(USD Million)</sup>: <b>{{companyModel.comp_budget}}</b> <br/>
+                  EMPLOYEES: <b>{{companyModel.comp_employees}}</b> <br/>
+                  REV <sup>(USD Billion)</sup>: <b>{{companyModel.comp_rev}}</b> <br/>
+                  DECISION MAKERS: <b>{{companyModel.comp_decision_makers}}</b>
+              </div>
+              <div class="row">&nbsp;</div>
+            </div>
+            <div class="row">&nbsp;</div>
+      </span>
+        <div class="modal-footer">
+          <div class="col-md-12 col-sm-12 col-xs-12" *ngIf="purchaseBtn">
+            <button style="font-size: 12px;"
+                    class="btn btn-default btn-sm pull-right"
+                    *ngIf="contactModel.is_purchased == 'false'"
+                    (click)="purchaseContactNow_user(contactModel.people_data_id)">
+              <i class="fa fa-credit-card"></i> Get this contact at {{contactModel.per_lead_credits}} Credits
+              <div class="load-bar"
+                   style="margin-bottom: -5px!important;"
+                   *ngIf="loading">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+              </div>
+            </button>
+          </div>
+          <div class="col-md-12 col-sm-12 col-xs-12 text-right" *ngIf="zeroCreditFlag">
+            <h5><b>Oh no! Looks like you don't have enough credits to search... Let's fix this!</b> &nbsp;
+              <a routerLink="/user/price" class="btn btn-default btn-sm">YES</a>
+            </h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-user-footer></app-user-footer>

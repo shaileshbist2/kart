@@ -1,0 +1,78 @@
+<div class="wrapper">
+  <app-admin-header></app-admin-header>
+  <div class="content-wrapper">
+    <section class="content-header">
+      <h1>
+        Dashboard
+      </h1>
+    </section>
+    <section class="content">
+      <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-yellow">
+              <i class="fa fa-users"></i>
+            </span>
+            <div class="info-box-content">
+              <span class="info-box-text">PEOPLE DATA / LEADS
+                <i (click)="refreshInfo()"
+                   [class]="faClass"
+                   style="cursor: pointer;"></i>
+              </span>
+              <span class="info-box-number">{{totalPeopleData}}</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-aqua">
+              <i class="fa fa-industry"></i>
+            </span>
+            <div class="info-box-content">
+              <span class="info-box-text">COMPANY
+              <i (click)="refreshInfo()"
+                 [class]="faClass"
+                 style="cursor: pointer;"></i></span>
+              <span class="info-box-number">{{totalCompanyData}}</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon" style="background: #40a926; color: #fff;">
+              <i class="fa fa-envelope-o"></i>
+            </span>
+            <div class="info-box-content">
+              <span class="info-box-text">VALID EMAILS
+                <i (click)="refreshInfo()"
+                   [class]="faClass"
+                   style="cursor: pointer;"></i>
+              </span>
+              <span class="info-box-number">
+                {{totalValidEmail}}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-danger" style="background: #d22929; color: #fff;">
+              <i class="fa fa-envelope-o"></i>
+            </span>
+            <div class="info-box-content">
+              <span class="info-box-text">INVALID EMAILS
+                <i (click)="refreshInfo()"
+                   [class]="faClass"
+                   style="cursor: pointer;"></i>
+              </span>
+              <span class="info-box-number">
+                {{totalInvalidEmail}}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <app-admin-footer></app-admin-footer>
+</div>

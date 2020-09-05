@@ -1,0 +1,101 @@
+<app-user-header></app-user-header>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '1px', size: '12px;' }"></ngx-loading>
+
+<div class="panel-content">
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div style="background:#fff; padding:10px; margin:10px 0px; border:1px solid #efefef; font-size:20px;"><i class="fa fa-list"></i> DATA LIST</div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+        <div class="data">
+          <div class="data-heading">Country</div>
+          <div class="data-body">
+            <span *ngFor="let data of countryData">
+              <span *ngIf="data.country_name !== ''">
+                  <label class="container1">
+                    {{data.country_name}} <sup>{{data.country}} </sup><span class="badge pull-right">{{data.country_count}}</span>
+                    <input type="checkbox" [checked]="data.is_checked"(click)="clickCountry(data.country, $event.target.checked)"/>
+                    <span class="checkmark1"></span>
+                  </label>
+                  <hr style="margin-top: 9px; margin-bottom: 7px; border: 0; border-top: 1px solid #eee;"/>
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <div class="data">
+          <div class="data-heading">Department</div>
+          <div class="data-body">
+            <span *ngFor="let data of departmentData">
+              <span *ngIf="data.department !== ''">
+                <label class="container1">
+                  {{data.department}} <sup>{{data.country}}</sup><span class="badge pull-right">{{data.department_count}}</span>
+                  <input type="checkbox" [checked]="data.is_checked" (click)="clickDepartment(data.department, $event.target.checked)"/>
+                  <span class="checkmark1"></span>
+                </label>
+                <hr style="margin-top: 9px; margin-bottom: 7px; border: 0; border-top: 1px solid #eee;"/>
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <div class="data">
+          <div class="data-heading">Domain</div>
+          <div class="data-body">
+            <span *ngFor="let data of domainData">
+              <span *ngIf="data.domain !== ''">
+                <label class="container1">
+                  {{data.domain}} <sup>{{data.country}}</sup><span class="badge pull-right">{{data.domain_count}}</span>
+                  <input type="checkbox" [checked]="data.is_checked" (change)="clickDomain(data.domain, $event.target.checked)"/>
+                  <span class="checkmark1"></span>
+                </label>
+                <hr style="margin-top: 9px; margin-bottom: 7px; border: 0; border-top: 1px solid #eee;"/>
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+        <div class="card-new">
+          <div class="card-new-body">
+            <form #f="ngForm" novalidate>
+              <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table dt-responsive table-responsive table-hover" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                  <th width="10%"></th>
+                  <th width="70%"></th>
+                  <th width="20%"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let data of dataSet" routerLink="/user/list/{{data.list_config_id}}/{{data.title.split(' ').join('-')+'-'+data.country}}" style="cursor:pointer;">
+                  <td><img src="{{data.display_image}}" style="width:100%;"/></td>
+                  <td>
+                    <div style="font-size: 16px; font-weight:bold; margin-bottom: 3px;">{{data.title}}</div>
+                    <div style="font-size:12px;">
+                      <strong>Country: </strong>{{data.country_name}} <sup style="font-size:9px; font-weight:bold;">[{{data.country}}]</sup> |
+                      <!--<strong>Entries: </strong>{{data.data_limit}} |-->
+                      <strong>Domain: </strong>{{data.domain}}
+                    </div>
+                  </td>
+                  <td>
+                    <button routerLink="/user/list/{{data.list_config_id}}/{{data.title.split(' ').join('-')+'-'+data.country}}" class="btn-data-buy">
+                      ${{data.price}} | Buy
+                    </button>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-user-footer></app-user-footer>

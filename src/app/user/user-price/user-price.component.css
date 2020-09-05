@@ -1,0 +1,13 @@
+table th:nth-child(3), td:nth-child(3) {
+  display: none;
+}
+
+.searchResultTable {
+  width: 93%;
+  margin-left: 19px;
+  margin-top: -40px;
+  z-index: 99999 !important;
+  border-radius: 4px;
+  padding: 20px 18px 1px 18px;
+  background: #ffffff;
+}

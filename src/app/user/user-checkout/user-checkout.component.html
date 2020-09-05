@@ -1,0 +1,57 @@
+<app-user-header [totalNumberOfList]="totalNumberOfList"></app-user-header>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '1px', size: '12px;' }"></ngx-loading>
+<div class="panel-content" style="padding-top: 50px;">
+
+  <div class="heading-sec">
+
+    <div class="col-md-4 column">
+      <div class="heading-profile">
+        <h2><i class="fa fa-shopping-cart"></i> CHECKOUT</h2>
+      </div>
+    </div>
+
+    <div class="widget" style="padding: 12px;">
+
+      <div class="col-md-12 form-group text-right">
+        <button routerLink="/user/store" mat-raised-button>
+          <i class="fa fa-database"></i>&nbsp; Store
+        </button>
+      </div>
+      <div class="col-md-12">
+        <div class="alert alert-warning failedMsg" style="display: none;">
+          <strong>Payment has been failed</strong>
+        </div>
+        <div class="alert alert-success successMsg" style="display: none;">
+          <strong>Thanks for purchasing the list</strong>
+          <a routerLink="/user/history" class="pull-right">View the list</a>
+        </div>
+        <table class="table table-bordered table-hover">
+          <tbody>
+          <tr *ngFor="let data of listModel">
+            <td><img src="{{data.display_image}}" width="25"/></td>
+            <td>{{data.title}}</td>
+            <td><i class="fa fa-dollar"></i> {{data.price}}</td>
+            <td class="text-center">
+              <button (click)="removeList(data.list_config_id)">
+                <i class="fa fa-trash-o"></i>
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <span *ngIf="payBtnView">
+          <div class="col-md-12 text-right">
+          <h4>Sub Total: <i class="fa fa-dollar"></i> {{totalPrice}} /-</h4>
+        </div>
+        <div class="col-md-12 form-group text-right">
+          <button mat-raised-button
+                  (click)="purchaseListByStripe_user()">
+            Pay Now
+          </button>
+        </div>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+<app-user-footer></app-user-footer>

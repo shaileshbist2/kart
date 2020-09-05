@@ -1,0 +1,492 @@
+<app-user-header [creditsDetails]="creditsDetails"></app-user-header>
+<!--<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '1px', size: '12px;' }"></ngx-loading>-->
+
+<div class="panel-content">
+  <div class="container-fluid">
+    <div style="background:#fff; padding:10px; margin:10px 9px 5px 9px; border:1px solid #efefef;">
+      <div class="row">
+        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+          <div style="font-size:16px; padding-top:4px;"><i class="fa fa-users"></i> PEOPLE SEARCH</div>
+        </div>
+        <div class="col-lg-7 col-md-7 col-sm-7 col-xs-12">
+          <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+              <div style="font-size:16px; padding-top:5px;">Total Records: <strong>{{totalRec}}</strong></div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 droplist">
+              <ng-template #rt let-r="result" let-t="term">
+                <div class="row">
+                  <div class="col-md-12 col-sm-12">
+                    {{r.name}} <sup>(+{{r.count}})</sup>&nbsp;
+                    <span [style.color]="(r.type == 'company' ? '#4286f4' : '') ||
+                            (r.type == 'country' ? '#db1c5c' : '') ||
+                            (r.type == 'designation_info' ? '#db711c' : '') ||
+                            (r.type == 'industry' ? '#fea636' : '') ||
+                            (r.type == 'full_name' ? '#2ab526' : '') ||
+                            (r.type == 'domain' ? '#2682b5' : '') ||
+                            (r.type == 'state' ? '#78db1c' : '')">
+                            {{r.type === 'full_name' ? 'People' : ''}}
+                            {{r.type === 'designation_info' ? 'Designation' : ''}}
+                            {{r.type === 'country' ? 'Country' : ''}}
+                            {{r.type === 'domain' ? 'Domain' : ''}}
+                            {{r.type === 'state' ? 'State' : ''}}
+                            {{r.type === 'company' ? 'Company' : ''}}
+                            {{r.type === 'department' ? 'Department' : ''}}
+                            {{r.type === 'industry' ? 'Industry' : ''}}
+                            {{r.type === 'lms' ? 'LMS' : ''}}
+              </span>
+                  </div>
+                </div>
+              </ng-template>
+              <input id="typeahead-http"
+                     type="text"
+                     class="form-control"
+                     [class.is-invalid]="searchFailed"
+                     [(ngModel)]="model"
+                     [ngbTypeahead]="search"
+                     (selectItem)="onSelectSearch($event)"
+                     [resultTemplate]="rt"
+                     [inputFormatter]="formatter"
+                     placeholder="Find people, companies, designation.."/>
+              <div class="load-bar" *ngIf="searching">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+              </div>
+              <!--<span *ngIf="searching">searching...</span>-->
+              <div class="invalid-feedback" *ngIf="searchFailed">Sorry, suggestions could not be loaded.</div>
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+              <button class="btn btn-success pull-right" (click)="resetSearch()">Reset</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+          <a routerLink="/user/price" class="btn btn-default pull-right">+ Add More credits</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+        <div class="card-new">
+          <div class="card-new-body">
+            <form #f="ngForm" novalidate>
+              <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+                     class="table dt-responsive table-hover display table-responsive" cellspacing="0"
+                     width="100%" style="font-size: 12px;">
+                <thead>
+                <tr>
+                  <!--<th style="width: 20px;">-->
+                  <!--<label class="container2" for="allpersons">All-->
+                  <!--<input type="checkbox" id="allpersons" name="allpersons" value="allpersons"-->
+                  <!--(click)="toggleSelect($event)"/>-->
+                  <!--<span class="checkmark2"></span>-->
+                  <!--</label>-->
+                  <!--</th>-->
+                  <th width="20%">NAME</th>
+                  <th width="20%">COMPANY</th>
+                  <th width="35%">DESIGNATION</th>
+                  <th width="5%">STATE</th>
+                  <th width="15%">COUNTRY</th>
+                  <th width="5%">VIEW</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let person of persons"
+                    [ngStyle]="{background: person.is_viewed == 'true' ? '#d5efd3' : ''}">
+                  <!--<td width="20">-->
+                  <!--<label class="container2" for="{{person.people_data_id}}">-->
+                  <!--<input type="checkbox" name="person_name[{{i}}]" [checked]="person.selected"-->
+                  <!--value="neighbourhood.selected" id="{{person.people_data_id}}"-->
+                  <!--(change)="person.selected = !(person.selected)"/>-->
+                  <!--<span class="checkmark2"></span>-->
+                  <!--</label>-->
+                  <!--</td>-->
+                  <td>
+                    <!--<a style="text-decoration: underline;"-->
+                    <!--(click)="clickToContactPerson_user(person.people_data_id)">{{ person.full_name }}-->
+                    <!--</a>-->
+                    <a style="text-decoration: underline;"
+                       [ngStyle]="{color: person.is_viewed == 'true' ? '#000000' : ''}"
+                       (click)="lgModal.show(); getContactObjInfo(person); checkDataId(person); checkAuth();">
+                      {{ person.full_name }}
+                    </a>
+                  </td>
+                  <td>{{ person.company }}</td>
+                  <td>{{ person.designation_info }}</td>
+                  <td>{{ person.state }}</td>
+                  <td>{{ person.country_name }}</td>
+                  <td class="text-center">
+                    <button class="btn btn-default btn-xs"
+                            (click)="lgModal.show(); getContactObjInfo(person); checkDataId(person); checkAuth();">
+                      <i class="fa fa-info-circle" style="font-size: 13px; color:green;"></i>
+                    </button>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </form>
+          </div>
+        </div>
+
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+        <div class="data">
+          <div class="data-heading">COUNTRY</div>
+          <div class="data-body">
+            <span *ngFor="let coun of countryFilter">
+            <span *ngIf="coun.country != ''">
+              <label class="container1" style="font-size: 11px;">
+                {{coun.country_name}} &nbsp;&nbsp;<sup>[{{coun.country}}] [{{coun.count}}]</sup>
+                <input type="checkbox"
+                       (change)="selectCountry(coun.country, $event.target.checked)"/>
+                <span class="checkmark1"></span>
+              </label>
+            </span>
+          </span>
+          </div>
+        </div>
+
+        <div class="data">
+          <div class="data-heading">STATE / REGION</div>
+          <div class="data-body">
+            <label class="container1" *ngIf="filterObject.countryFilter" style="font-size: 11px;">
+              Select All
+              <input type="checkbox"
+                     [(ngModel)]="selectAllStates"
+                     (change)="stateOptionsSelectAll();"/>
+              <span class="checkmark1"></span>
+            </label>
+            <span *ngFor="let stat of stateFilter">
+            <span *ngIf="stat.state != ''">
+              <label class="container1" style="font-size: 11px;">
+                {{stat.state}} &nbsp;&nbsp;<sup>[{{stat.count}}]</sup>
+                <input type="checkbox"
+                       [(ngModel)]="stat.selected"
+                       (change)="stateOptions(stat.state, $event.target.checked); checkIfAllSelectedStates();"/>
+                <span class="checkmark1"></span>
+              </label>
+            </span>
+            </span>
+          </div>
+        </div>
+
+        <div class="data">
+          <div class="data-heading">LEVEL OF MANAGEMENT</div>
+          <div class="data-body">
+            <label class="container1" *ngIf="filterObject.stateFilter" style="font-size: 11px;">
+              Select All
+              <input type="checkbox"
+                     [(ngModel)]="selectAllLevel"
+                     (change)="levelOptionsSelectAll();"/>
+              <span class="checkmark1"></span>
+            </label>
+            <span *ngFor="let desig of managementLevelFilter">
+            <span *ngIf="desig.management_level !== ''">
+              <label class="container1" style="font-size: 11px;">
+                {{desig.management_level == 'Senior' ? 'Senior Level Decision Maker' : ''}}
+                {{desig.management_level == 'Mid' ? 'Mid Level Decision Maker' : ''}}
+                {{desig.management_level == 'First' ? 'First Level Decision Maker' : ''}}
+                {{desig.management_level == 'Other' ? 'Other' : ''}}
+                &nbsp;&nbsp;<sup>[{{desig.count}}]</sup>
+                <input type="checkbox"
+                       [(ngModel)]="desig.selected"
+                       (change)="levelOptions(desig.management_level, $event.target.checked); checkIfAllSelectedLevel();"/>
+                <span class="checkmark1"></span>
+              </label>
+            </span>
+          </span>
+          </div>
+        </div>
+
+        <div class="data">
+          <div class="data-heading">DEPARTMENT</div>
+          <div class="data-body">
+            <label class="container1" *ngIf="filterObject.managementLevelFilter" style="font-size: 11px;">
+              Select All
+              <input type="checkbox"
+                     [(ngModel)]="selectAllDepartment"
+                     (change)="departmentOptionsSelectAll();"/>
+              <span class="checkmark1"></span>
+            </label>
+            <span *ngFor="let deprt of departmentFilter">
+            <span *ngIf="deprt.department !== ''">
+              <label class="container1" style="font-size: 11px;">
+                {{deprt.department}} &nbsp;&nbsp;<sup>[{{deprt.count}}]</sup>
+                <input type="checkbox"
+                       [(ngModel)]="deprt.selected"
+                       (change)="departmentOptions(deprt.department, $event.target.checked); checkIfAllSelectedDepartment();"/>
+                <span class="checkmark1"></span>
+              </label>
+            </span>
+          </span>
+          </div>
+        </div>
+
+        <div class="data">
+          <div class="data-heading">INDUSTRY / DOMAIN</div>
+          <div class="data-body">
+            <label class="container1" *ngIf="filterObject.departmentFilter" style="font-size: 11px;">
+              Select All
+              <input type="checkbox"
+                     [(ngModel)]="selectAllIndustry"
+                     (change)="industryOptionsSelectAll();"/>
+              <span class="checkmark1"></span>
+            </label>
+            <span *ngFor="let ind of industryFilter">
+            <span *ngIf="ind.industry !== ''">
+              <label class="container1" style="font-size: 11px;">
+                {{ind.industry}} &nbsp;&nbsp;<sup>[{{ind.count}}]</sup>
+                <input type="checkbox"
+                       [(ngModel)]="ind.selected"
+                       (change)="industryOptions(ind.industry, $event.target.checked); checkIfAllSelectedIndustry();"/>
+                  <span class="checkmark1"></span>
+              </label>
+            </span>
+          </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--<div class="heading-sec">-->
+  <!--<div class="col-md-12 col-sm-12 column">-->
+  <!--<div class="heading-profile">-->
+
+  <!--</div>-->
+  <!--</div>-->
+  <!--<div class="col-md-12 column">-->
+  <!--<div class="top-bar-chart">-->
+  <!--<div class="quick-report">-->
+  <!--<div class="quick-report-infos">-->
+  <!--<p>Total Credits</p>-->
+  <!--<h3>{{creditsDetails.total_credits}}</h3>-->
+  <!--</div>-->
+  <!--</div>-->
+  <!--<div class="quick-report">-->
+  <!--<div class="quick-report-infos">-->
+  <!--<p>Credit Left</p>-->
+  <!--<h3>{{creditsDetails.credits_left}}</h3>-->
+  <!--</div>-->
+  <!--</div>-->
+  <!--<div class="quick-report">-->
+  <!--<div class="quick-report-infos">-->
+  <!--<p></p>-->
+  <!--</div>-->
+  <!--</div>-->
+  <!--</div>-->
+  <!--Top Bar Chart-->
+  <!--</div>-->
+  <!--</div>-->
+
+  <!--<div class="widget" style="border-top: 1px solid orangered; padding: 10px 0 17px 2px;">-->
+  <!--<div class="col-md-9 col-sm-9">-->
+  <!--<div class="col-md-12 col-sm-12" style="background: #fafafa; padding: 10px; border-radius: 4px;">-->
+  <!--<div class="col-md-5 col-sm-5 text-left">-->
+
+  <!--</div>-->
+  <!--<div class="col-md-5 col-sm-5 text-right">-->
+  <!--<ng-template #customItemTemplate let-model="item" let-index="index">-->
+  <!--<span style="font-size: 12px; padding: 12px;">-->
+  <!--<span>{{model.name}}-->
+  <!--<sup style="font-size: 10px;">({{ model.count }}+ contacts)-->
+  <!--<b [style.color]="(model.type == 'company' ? '#4286f4' : '') ||-->
+  <!--(model.type == 'country' ? '#db1c5c' : '') ||-->
+  <!--(model.type == 'designation_info' ? '#db711c' : '') ||-->
+  <!--(model.type == 'full_name' ? '#2ab526' : '') ||-->
+  <!--(model.type == 'domain' ? '#2682b5' : '') ||-->
+  <!--(model.type == 'state' ? '#78db1c' : '')">-->
+  <!--{{model.type === 'full_name' ? 'People' : ''}}-->
+  <!--{{model.type === 'designation_info' ? 'Designation' : ''}}-->
+  <!--{{model.type === 'country' ? 'Country' : ''}}-->
+  <!--{{model.type === 'domain' ? 'Domain' : ''}}-->
+  <!--{{model.type === 'state' ? 'State' : ''}}-->
+  <!--{{model.type === 'company' ? 'Company' : ''}}-->
+  <!--{{model.type === 'department' ? 'Department' : ''}}-->
+  <!--{{model.type === 'lms' ? 'LMS' : ''}}-->
+  <!--</b>-->
+  <!--</sup>-->
+  <!--</span>-->
+  <!--</span>-->
+  <!--</ng-template>-->
+  <!--<input [(ngModel)]="selectedValue"-->
+  <!--[typeahead]="peopleSearchList"-->
+  <!--typeaheadOptionField="name"-->
+  <!--(typeaheadOnSelect)="onSelectSearch($event)"-->
+  <!--[typeaheadScrollable]="false"-->
+  <!--class="form-control input-sm"-->
+  <!--placeholder="Find contacts and companies"-->
+  <!--[typeaheadItemTemplate]="customItemTemplate"-->
+  <!--(keyup)="searchTerm$.next($event.target.value); searchLoader=true;"-->
+  <!--[typeaheadWaitMs]="3000"-->
+  <!--required/>-->
+  <!--<div class="load-bar" *ngIf="searchLoader">-->
+  <!--<div class="bar"></div>-->
+  <!--<div class="bar"></div>-->
+  <!--<div class="bar"></div>-->
+  <!--</div>-->
+  <!--</div>-->
+  <!--<div class="col-md-5 col-sm-5 text-right">-->
+
+  <!--</div>-->
+  <!--<div class="col-md-2 col-sm-2">-->
+  <!--<div class="btn-group">-->
+
+  <!--</div>-->
+  <!--</div>-->
+  <!--<div class="col-md-2">-->
+  <!--<input type="button" (click)="ApplyFilters(f.valid)"-->
+  <!--class="btn btn-primary btn-xs filters_btn pull-right"-->
+  <!--value="Apply Filters">-->
+  <!--</div>-->
+  <!--</div>-->
+  <!--<div class="col-md-12 col-sm-12">-->
+
+  <!--</div>-->
+  <!--</div>-->
+  <!--<div class="col-md-3 col-sm-3" style="padding-top: 12px; border-radius: 0;">-->
+
+
+  <!--<div class="row accodionBox" style="padding: 0 0 0 0;">-->
+  <!--<div class="col-md-12 subHeaderGradient accordion" style="padding:8px; letter-spacing: 2px;">-->
+  <!--<span>COUNTRY</span>-->
+  <!--<i class="fa fa-arrow-down pull-right" style="color: #5e5e5e;"></i>-->
+  <!--</div>-->
+  <!--<div class="col-md-12 panel" style="display: block; padding: 5px;">-->
+
+  <!--</div>-->
+  <!--</div>-->
+
+  <!--<div class="row accodionBox" style="padding: 0 0 0 0;">-->
+  <!--<div class="col-md-12 subHeaderGradient accordion" style="padding:8px; letter-spacing: 2px;">-->
+  <!--<span>STATE / REGION</span>-->
+  <!--<i class="fa fa-arrow-down pull-right" style="color: #5e5e5e;"></i>-->
+  <!--</div>-->
+
+  <!--<div class="col-md-12 panel" style="display: block; padding: 5px;">-->
+
+  <!--</div>-->
+  <!--</div>-->
+
+  <!--<div class="row accodionBox" style="padding: 0 0 0 0;">-->
+  <!--<div class="col-md-12 subHeaderGradient accordion" style="padding:8px; letter-spacing: 2px;">-->
+  <!--<span>LEVEL OF MANAGEMENT</span>-->
+  <!--<i class="fa fa-arrow-down pull-right" style="color: #5e5e5e;"></i>-->
+  <!--</div>-->
+  <!--<div class="col-md-12 panel" style="display: block; padding: 5px;">-->
+
+  <!--</div>-->
+  <!--</div>-->
+
+  <!--<div class="row accodionBox" style="padding: 0 0 0 0;">-->
+  <!--<div class="col-md-12 subHeaderGradient accordion" style="padding:8px; letter-spacing: 2px;">-->
+  <!--<span>DEPARTMENT</span>-->
+  <!--<i class="fa fa-arrow-down pull-right" style="color: #5e5e5e;"></i>-->
+  <!--</div>-->
+  <!--<div class="col-md-12 panel" style="display: none; padding: 5px;">-->
+
+  <!--</div>-->
+  <!--</div>-->
+
+  <!--<div class="row accodionBox" style="padding: 0 0 0 0;">-->
+  <!--<div class="col-md-12 subHeaderGradient accordion" style="padding:8px; letter-spacing: 2px;">-->
+  <!--<span>INDUSTRY / DOMAIN</span>-->
+  <!--<i class="fa fa-arrow-down pull-right" style="color: #5e5e5e;"></i>-->
+  <!--</div>-->
+  <!--<div class="col-md-12 panel" style="display: none; padding: 5px;">-->
+
+  <!--</div>-->
+  <!--</div>-->
+  <!--</div>-->
+  <!--</div>-->
+</div>
+
+<!----------------------------- CONTACT MODAL ------------------------------------------------------->
+<div bsModal #lgModal="bs-modal" class="modal fade" tabindex="-1"
+     role="dialog" aria-labelledby="dialog-sizes-name1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header" style="background: #f9f9f9;">
+        <h4 id="dialog-sizes-name1" class="modal-title pull-left">
+          CONTACT PERSON - <span class="text-uppercase"
+                                 style="color: #174354;"><b>{{contactModel.full_name}}</b></span>
+        </h4>
+        <button type="button" class="close pull-right" (click)="lgModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="col-md-6 form-group" style="font-size: 11px;">
+          <h4>{{contactModel.full_name}}</h4>
+          <h5>{{contactModel.designation_info}}</h5>
+          EMAIL: <b style="text-decoration: underline;">{{contactModel.email_id}}</b><br/>
+          CONTACT: <b>{{contactModel.contact_number}}</b><br/>
+          <span *ngIf="contactModel.linkedin !== 'N/A'">
+                LINKEDIN: <b><a [href]="contactModel.linkedin" target="_blank" style="text-decoration: underline;">{{contactModel.linkedin}}</a></b>
+              </span>
+        </div>
+        <div class="col-md-6 form-group text-right" style="font-size: 11px;">
+          <h5>{{contactModel.company}}</h5>
+          WEBSITE: <b>{{contactModel.company_website}}</b> <br/>
+          DEPARTMENT: <b>{{contactModel.department}}</b> <br/>
+          LOCATION: <b>{{contactModel.country}} ({{contactModel.state}})</b> <br/>
+          INDUSTRY: <b>{{contactModel.industry}}</b> <br/>
+          DOMAIN: <b>{{contactModel.domain}}</b> <br/>
+          COMPANY SIZE: <b>{{contactModel.company_size}}</b> <br/>
+        </div>
+      </div>
+      <div class="row">&nbsp;</div>
+      <span *ngIf="showCompanyDetail">
+            <div class="modal-header" style="background: #f9f9f9;">
+              <h4 id="" class="modal-title pull-left">
+                COMPANY - <span class="text-uppercase" style="color: #174354;"><b>{{companyModel.company}}</b></span>
+              </h4>
+            </div>
+            <div class="modal-body" style="font-size: 11px;">
+              <div class="col-md-6 col-sm-6">
+                LOCATION: <b>{{companyModel.location}}</b> <br/>
+                CITY: <b>{{companyModel.city}}</b> <br/>
+                STATE: <b>{{companyModel.state}}</b> <br/>
+                TECHNOLOGY USED: <b>{{companyModel.technology_used}}</b>
+              </div>
+              <div class="col-md-6 col-sm-6 text-right">
+                  BUDGET <sup>(USD Million)</sup>: <b>{{companyModel.budget}}</b> <br/>
+                  EMPLOYEES: <b>{{companyModel.employees}}</b> <br/>
+                  REV <sup>(USD Billion)</sup>: <b>{{companyModel.rev}}</b> <br/>
+                  DECISION MAKERS: <b>{{companyModel.decision_makers}}</b>
+              </div>
+              <div class="row">&nbsp;</div>
+            </div>
+            <div class="row">&nbsp;</div>
+      </span>
+      <div class="modal-footer">
+        <div class="col-md-12 col-sm-12 col-xs-12" *ngIf="purchaseBtn">
+          <button style="font-size: 12px;"
+                  class="btn btn-default btn-sm pull-right"
+                  *ngIf="contactModel.is_purchased == 'false'"
+                  (click)="purchaseContactNow_user(contactModel.people_data_id)">
+            <i class="fa fa-credit-card"></i> Get this contact at {{contactModel.per_lead_credits}} Credits
+            <div class="load-bar"
+                 style="margin-bottom: -5px!important;"
+                 *ngIf="loading">
+              <div class="bar"></div>
+              <div class="bar"></div>
+              <div class="bar"></div>
+            </div>
+          </button>
+        </div>
+        <div class="col-md-12 col-sm-12 col-xs-12 text-right" *ngIf="zeroCreditFlag">
+          <h5><b>Oh no! Looks like you don't have enough credits to search... Let's fix this!</b> &nbsp;
+            <a routerLink="/user/price" class="btn btn-default btn-sm">YES</a>
+          </h5>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-user-footer></app-user-footer>

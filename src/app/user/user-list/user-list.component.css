@@ -1,0 +1,13 @@
+.text-style-1 {
+  color: green;
+}
+
+.zoom:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 30px -10px #0c0c0c;
+  z-index: 2;
+  transition: transform .2s;
+}
+
+
+/**********************************************************************************/

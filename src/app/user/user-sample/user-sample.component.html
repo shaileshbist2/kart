@@ -1,0 +1,50 @@
+<app-user-header></app-user-header>
+<!--<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '1px', size: '12px;' }"></ngx-loading>-->
+
+<div class="panel-content" style="padding-top: 70px;">
+  <div class="box">
+    <i class="fa fa-envelope contact-us"></i>
+  </div>
+  <div class="col-md-6 col-sm-6 text-center form-group">
+    <ng-template #rt let-r="result" let-t="term">
+      <div class="row">
+        <div class="col-md-12 col-sm-12">
+          {{r.name}} <sup>(+{{r.count}})</sup>&nbsp;
+          <span [style.color]="(r.type == 'company' ? '#4286f4' : '') ||
+                         (r.type == 'country' ? '#db1c5c' : '') ||
+                         (r.type == 'designation_info' ? '#db711c' : '') ||
+                         (r.type == 'full_name' ? '#2ab526' : '') ||
+                         (r.type == 'domain' ? '#2682b5' : '') ||
+                         (r.type == 'state' ? '#78db1c' : '')">
+            {{r.type === 'full_name' ? 'People' : ''}}
+            {{r.type === 'designation_info' ? 'Designation' : ''}}
+            {{r.type === 'country' ? 'Country' : ''}}
+            {{r.type === 'domain' ? 'Domain' : ''}}
+            {{r.type === 'state' ? 'State' : ''}}
+            {{r.type === 'company' ? 'Company' : ''}}
+            {{r.type === 'department' ? 'Department' : ''}}
+            {{r.type === 'lms' ? 'LMS' : ''}}
+          </span>
+        </div>
+      </div>
+      <!--<ngb-highlight-->
+      <!--[result]="r.name + ' (' + r.count + ') ' + r.type"-->
+      <!--[term]="t">-->
+      <!--</ngb-highlight>-->
+    </ng-template>
+    <label for="typeahead-http">Search for a wiki page:</label>
+    <input id="typeahead-http"
+           type="text" class="form-control"
+           [class.is-invalid]="searchFailed"
+           [(ngModel)]="model"
+           [ngbTypeahead]="search"
+           (selectItem)="selectItem($event)"
+           [resultTemplate]="rt"
+           [inputFormatter]="formatter"
+           placeholder="Wikipedia search"/>
+    <span *ngIf="searching">searching...</span>
+    <div class="invalid-feedback" *ngIf="searchFailed">Sorry, suggestions could not be loaded.</div>
+    <hr/>
+    <pre>Model: {{ model | json }}</pre>
+  </div>
+</div>

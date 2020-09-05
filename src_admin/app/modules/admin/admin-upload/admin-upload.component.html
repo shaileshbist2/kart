@@ -1,0 +1,79 @@
+<div class="wrapper">
+  <app-admin-header></app-admin-header>
+  <div class="content-wrapper">
+    <section class="content-header">
+      <h1>
+        UPLOAD EXCEL DATA
+      </h1>
+    </section>
+    <section class="content">
+      <div class="row">
+        <div class="col-md-4 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-yellow">
+              <i class="fa fa-users"></i>
+            </span>
+            <div class="info-box-content">
+              <span class="info-box-text">PEOPLE DATA / LEADS
+                <i (click)="refreshInfo()"
+                   [class]="faClass"
+                   style="cursor: pointer;"></i>
+              </span>
+              <span class="info-box-number">
+                {{totalPeopleData}}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-aqua">
+              <i class="fa fa-industry"></i>
+            </span>
+            <div class="info-box-content">
+              <span class="info-box-text">COMPANY DATA
+              <i (click)="refreshInfo()"
+                 [class]="faClass"
+                 style="cursor: pointer;"></i></span>
+              <span class="info-box-number">{{totalCompanyData}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="box box-primary">
+        <div class="box-header with-border">
+          <div class="col-md-12 col-sm-12">
+            <div [class]="alertClass">
+              <strong>{{errorMsg}}</strong>
+              <br/>
+              <span>{{serverError}}</span>
+            </div>
+            <select class="form-control"
+                    [(ngModel)]="excel_file_type">
+              <option value="undefined" disabled selected hidden>Select Type</option>
+              <option value="null" disabled selected hidden>Select Type</option>
+              <option *ngFor="let data of dropDown"
+                      [value]="data.value">
+                {{(data.value === 'people_data_upload' ? 'People Data Upload' : 'Company Data Upload') }}
+              </option>
+            </select>
+            <br/>
+            <input type="file"
+                   name="excel"
+                   #activeFrameInputFile
+                   ng2FileSelect
+                   [uploader]="uploader"/>
+            <br/>
+            <button type="button"
+                    class="btn btn-success btn-s"
+                    (click)="uploader.uploadAll(); this.loader = true;"
+                    [disabled]="!uploader.getNotUploadedItems().length || !excel_file_type">
+              Upload Excel File &nbsp; <i class="fa fa-spinner fa-spin" style="font-size:20px" *ngIf="loader"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <app-admin-footer></app-admin-footer>
+</div>

@@ -1,0 +1,192 @@
+/********************** Scroll Box ****************************************************/
+.box {
+  position: fixed;
+  top: 80px;
+  right: 0;
+  z-index: 9999999;
+  font-size: 50px;
+  color: #303030;
+  cursor: pointer;
+  display: none;
+}
+
+/**************************************************************************************/
+
+/*.zoom {
+  padding: 50px;
+  background-color: green;
+  transition: transform .2s; !* Animation *!
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+  box-shadow: #0c0c0c 3px 5px 31px -9px;
+  position: relative;
+}*/
+
+.zoom:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 30px -10px #0c0c0c;
+  z-index: 2;
+  transition: transform .2s;
+}
+
+/**************************************************************************************/
+@media only screen and (max-width: 1600px) {
+  div.search-form {
+    border: 1px solid #e0e5e7;
+    border-radius: 0;
+    float: left;
+    height: 38px;
+    margin-left: 0;
+    margin-top: 14px;
+    position: relative;
+    width: 100% !important;
+    background: #ffffff;
+  }
+
+  .dropdown-menu {
+    width: 100% !important;
+  }
+
+  div.search-form > input {
+    outline: none;
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    border: medium none;
+    color: #7b7b7b;
+    float: left;
+    font-size: 15px;
+    padding: 18px 0 10px 20px;
+    width: 100%;
+  }
+
+  .load-bar {
+    position: relative;
+    margin-top: -2px;
+    width: 100%;
+    height: 2px;
+    background-color: #fdba2c;
+  }
+}
+
+@media only screen and (max-width: 375px) {
+  div.search-form {
+    border: 1px solid #e0e5e7;
+    border-radius: 0;
+    float: left;
+    height: 38px;
+    margin-left: 0;
+    margin-top: 14px;
+    position: relative;
+    width: 100% !important;
+    background: #ffffff;
+  }
+
+  div.search-form > input {
+    outline: none;
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    border: medium none;
+    color: #7b7b7b;
+    float: left;
+    font-size: 12px;
+    padding: 18px 0 10px 20px;
+    width: 100%;
+  }
+
+  .load-bar {
+    position: relative;
+    margin-top: -2px;
+    width: 100%;
+    height: 2px;
+    background-color: #fdba2c;
+  }
+}
+
+/**************************************************************************************/
+
+.grids {
+  padding: 16px !important;
+}
+
+table th:nth-child(3), td:nth-child(3) {
+  display: none;
+}
+
+.searchResultTable {
+  width: 93%;
+  margin-left: 19px;
+  margin-top: -40px;
+  z-index: 99999 !important;
+  border-radius: 4px;
+  padding: 20px 18px 1px 18px;
+  background: #ffffff;
+}
+
+/***********************************************************************************/
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font: 16px Arial;
+}
+
+.autocomplete {
+  /*the container must be positioned relative:*/
+  position: relative;
+  display: inline-block;
+}
+
+input {
+  border: 1px solid transparent;
+  background-color: #f1f1f1;
+  padding: 10px;
+  font-size: 16px;
+}
+
+input[type=text] {
+  background-color: #f1f1f1;
+  width: 100%;
+}
+
+input[type=submit] {
+  background-color: DodgerBlue;
+  color: #fff;
+  cursor: pointer;
+}
+
+.autocomplete-items {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  /*position the autocomplete items to be the same width as the container:*/
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+
+.autocomplete-items div {
+  padding: 10px;
+  cursor: pointer;
+  background-color: #fff;
+  border-bottom: 1px solid #d4d4d4;
+}
+
+.autocomplete-items div:hover {
+  /*when hovering an item:*/
+  background-color: #e9e9e9;
+}
+
+.autocomplete-active {
+  /*when navigating through the items using the arrow keys:*/
+  background-color: DodgerBlue !important;
+  color: #ffffff;
+}
+
+
+
+/***************************************************/
+.sub_placeholder::placeholder {
+  color: #ffffff;
+}

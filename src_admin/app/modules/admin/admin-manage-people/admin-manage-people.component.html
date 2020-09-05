@@ -1,0 +1,235 @@
+<div class="wrapper">
+  <app-admin-header></app-admin-header>
+  <div class="content-wrapper">
+    <section class="content-header">
+      <h1>
+        Manage People
+        <div class="btn-group pull-right">
+          <button class="btn btn-primary btn-xs"
+                  (click)="showPeopleList()">Contacts
+          </button>
+          <button class="btn btn-success btn-xs"
+                  (click)="addNewPeople()">+Add New Contact
+          </button>
+        </div>
+      </h1>
+    </section>
+    <section class="content">
+      <div class="row" [hidden]="peopleFormView">
+        <div [class]="resultViewClass" *ngIf="resultView">
+          <div class="box box-primary">
+            <div class="box-header">
+              <h3 class="box-title">
+                Result View
+              </h3>
+              <button class="btn btn-default btn-xs pull-right"
+                      (click)="getDetails_a(receiveMsg.data.people_data_id)">Edit
+              </button>
+            </div>
+            <div class="box-body" style="font-size: 11px;">
+              <table class="table table-bordered table-hover table-striped result_view_table" style="font-size: 11px;">
+                <tr *ngFor="let key of objectKeys(receiveMsg.data)">
+                  <td *ngIf="(key !== 'created_at') &&
+                        (key !== 'updated_at') &&
+                        (key !== 'created_by') &&
+                        (key !== 'updated_by') &&
+                        (key !== 'message')">
+                    <div class="col-md-4 col-sm-4 border-right">
+                      <strong>{{strReplaceUnderscoreToSpace(key)}}</strong>
+                    </div>
+                    <div class="col-md-8 col-sm-8">
+                      {{receiveMsg.data[key]}}
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div [class]="formViewClass">
+          <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">Add People</h3>
+            </div>
+            <div class="box-body">
+              <div *ngIf="isFormReady">
+                <app-dynamic-form-builder [fields]="getFields()"
+                                          (messageEvent)="receiveMessage($event)"
+                                          [createBtn]="createBtn"
+                                          (createUpdateMsg)="createUpdateMsg($event)"
+                                          [updateBtn]="updateBtn"
+                                          (cancelBtn)="cancelBtnRes()"
+                                          [peopleDataId]="peopleDataId">
+                </app-dynamic-form-builder>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="box box-primary" [hidden]="peopleListView">
+        <div class="box-header with-border">
+          <div class="col-md-3 col-sm-3 form-group">
+            <h4 class="box-ti>-e">
+              <i class="fa fa-users"></i>
+              PEOPLE DATA <strong>{{totalPeopleData}}</strong>
+            </h4>
+          </div>
+          <div class="col-md-5 col-sm-5">
+            <input type="text"
+                   class="form-control input-sm pull-right"
+                   placeholder="Search"
+                   [(ngModel)]="searchInput"
+                   (ngModelChange)="this.inputType2.next($event)"/>
+          </div>
+          <div class="col-md-4 col-sm-4">
+            <button class="btn btn-default btn-xs pull-right"
+                    style="width: 300px; border-radius: 0;"
+                    (click)="scanEmails_a(fo.valid);">
+              <img src="../../../../assets/images/mail.svg"
+                   style="width: 22px;"
+                   *ngIf="envelopSvg"/>
+              <i class="fa fa-envelope" *ngIf="envelopFa"></i>
+              Validate Selected Emails
+            </button>
+            <div class="btn-group pull-right">
+              <label class="btn btn-success btn-xs container3" style="border-radius: 0; width: 150px">
+                <input type="checkbox"
+                       [(ngModel)]="emailOptionObj.is_valid_email_checked"
+                       [checked]="emailOptionObj.is_valid_email_checked"
+                       (click)="isOptionChecked('validEmail', $event.target.checked)"/>
+                <span class="checkmark3"></span>
+                Valid Emails {{totalValidEmail}}
+              </label>
+              <label class="btn btn-warning btn-xs container3" style="border-radius: 0; width: 150px">
+                <input type="checkbox"
+                       [(ngModel)]="emailOptionObj.is_invalid_email_checked"
+                       [checked]="emailOptionObj.is_invalid_email_checked"
+                       (click)="isOptionChecked('inValidEmail', $event.target.checked)"/>
+                <span class="checkmark3"></span>
+                Invalid Emails {{totalInvalidEmail}}
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="box-body">
+          <form #fo="ngForm" novalidate>
+            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+                   class="table table-bordered dt-responsive table-hover display table-responsive" cellspacing="0"
+                   width="100%" style="font-size: 11px;">
+              <thead>
+              <tr>
+                <th style="width: 20px;">
+                  <label class="container2" for="allPeople">All
+                    <input type="checkbox" id="allPeople" name="allPeople" value="allPeople"
+                           (click)="toggleSelect($event)"/>
+                    <span class="checkmark2"></span>
+                  </label>
+                </th>
+                <th>NAME</th>
+                <th>DESIGNATION</th>
+                <th>COMPANY</th>
+                <th>COUNTRY</th>
+                <th>DOMAIN</th>
+                <th>DEPARTMENT</th>
+                <th>INDUSTRY</th>
+                <th>CREATED AT</th>
+                <th>EDIT</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let data of people">
+                <td width="20">
+                  <label class="container2" for="{{data.people_data_id}}">
+                    <input type="checkbox" name="person_name[{{i}}]" [checked]="data.selected"
+                           value="neighbourhood.selected" id="{{data.people_data_id}}"
+                           (change)="data.selected = !(data.selected); checkAllSelectCheckbox(data.selected)"/>
+                    <span class="checkmark2"></span>
+                  </label>
+                </td>
+                <td width="200">
+                  <b class="text-capitalize">{{ data.person_first_name + ' ' + data.person_last_name}}</b><br/>
+                  <span [ngStyle]="{color: (data.email_verify === '1' ? 'green' : 'red')}">
+                    {{ data.email_id }}
+                  </span>
+                  <br/>
+                  {{ data.contact_number }}
+                </td>
+                <td>{{ data.designation_info }}</td>
+                <td>{{ data.company }}</td>
+                <td>{{ data.country_name }}</td>
+                <td>{{ data.domain }}</td>
+                <td>{{ data.department }}</td>
+                <td>{{ data.industry }}</td>
+                <td>{{ data.created_at }}</td>
+                <td class="text-center" width="100">
+                  <button class="btn btn-default btn-xs"
+                          data-toggle="modal"
+                          data-target="#modal-info"
+                          (click)="showContactDetails_a(data.people_data_id)">
+                    <i class="fa fa-info-circle" style="font-size: 13px; color:green;"></i>
+                  </button> &nbsp;
+                  <button class="btn btn-default btn-xs"
+                          (click)="getDetails_a(data.people_data_id)">
+                    <i class="fa fa-edit"></i>
+                  </button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </form>
+        </div>
+      </div>
+
+      <div class="modal fade in"
+           id="modal-info"
+           style="padding-right: 17px;">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span></button>
+              <h4 class="modal-title">People Contact</h4>
+            </div>
+            <div class="modal-body">
+              <div class="row" *ngIf="showContactInfo">
+                <!--<table class="table table-bordered table-hover table-striped result_view_table"-->
+                <!--style="font-size: 11px;">-->
+                <!--<tr *ngFor="let key of objectKeys(contactInfoObj)">-->
+                <!--<td>{{key}}: {{contactInfoObj[key]}}</td>-->
+                <!--</tr>-->
+                <!--</table>-->
+                <div class="col-md-12 col-sm-12"
+                     *ngFor="let key of objectKeys(contactInfoObj)">
+                  <div class="col-md-4 col-sm-4 text-capitalize border-line">
+                    <strong>{{strReplaceUnderscoreToSpace(key)}}</strong>
+                  </div>
+                  <div class="col-md-8 col-sm-8 border-line">
+                    {{contactInfoObj[key]}}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+              <!--<button type="button" class="btn btn-outline">Save changes</button>-->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--<div class="col-md-12 col-sm-12 col-xs-12 snackbar" *ngIf="receiveMsg">-->
+      <!--<div class="col-md-4 col-sm-4">-->
+      <!--<label>Field: {{receiveMsg.column_name}}</label>-->
+      <!--</div>-->
+      <!--<div class="col-md-4 col-sm-4">-->
+      <!--<label>Status: <span [ngStyle]="{color: receiveMsg.message === 'false' ? 'green' : 'red'}">{{receiveMsg.message === 'false' ? 'Available' : 'Already Exists'}}</span></label>-->
+      <!--</div>-->
+      <!--<div class="col-md-4 col-sm-4">-->
+      <!--<label>Value: {{receiveMsg.column_value}}</label>-->
+      <!--</div>-->
+      <!--</div>-->
+    </section>
+  </div>
+  <app-admin-footer></app-admin-footer>
+</div>

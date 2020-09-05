@@ -1,0 +1,255 @@
+<app-user-header></app-user-header>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '1px', size: '12px;' }"></ngx-loading>
+
+<div class="panel-content">
+
+  <div class="container-fluid">
+    <div style="background:#fff; padding:10px; margin:10px 9px 5px 9px; border:1px solid #efefef; font-size:20px;">
+      <div class="row">
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+          <div><i class="fa fa-book"></i> CONTACT HISTORY</div>
+        </div>
+        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+          <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <mat-button-toggle-group name="fontStyle" aria-label="Font Style" value="credit">
+                <mat-button-toggle (click)="callData('credit');" value="credit">All Credits</mat-button-toggle>
+                <mat-button-toggle (click)="callData('list')" value="list">All List</mat-button-toggle>
+              </mat-button-toggle-group>
+              <button mat-raised-button (click)="emailSelectedContacts_user(f.valid)" style="font-size:13px; margin-left:15px;">
+                <div class="load-bar2" *ngIf="btnLoading">
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                </div>
+                <i class="fa fa-file-excel-o"></i> EMAIL SELECTED CONTACTS
+                <span style="color: red;">{{errorMsg}}</span>
+                <span style="color: green;">{{successMsg}}</span>&nbsp;
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+        <div class="data">
+          <div class="data-heading"><i class="fa fa-list"></i> LIST</div>
+          <div class="data-body" style="min-height: 400px!important;">
+            <a routerLink="/user/store"
+               *ngIf="purchasedList.length == 0">Add List Now</a>
+            <label class="container1" *ngFor="let data of purchasedList">
+              <input type="checkbox" (change)="logCheckbox('list', data, $event.target.checked)"/>
+              <span class="checkmark1"></span>
+              <span style="font-size: 11px;">{{data.title}}</span> <br/>
+              <span style="color: #5a5a5a;">
+              <span style="font-weight: 100">Department:</span> {{data.department}}<br/>
+              <span style="font-weight: 100">Industry:</span> {{data.industry}}
+            </span>
+              <hr style="margin-top: 6px; margin-bottom: 12px;"/>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+        <div class="card-new">
+          <div class="card-new-body">
+            <form #f="ngForm" novalidate>
+              <table datatable
+                     [dtOptions]="dtOptions"
+                     [dtTrigger]="dtTrigger"
+                     class="table table-striped dt-responsive table-hover"
+                     cellspacing="0"
+                     width="100%" style="font-size: 12px;">
+                <thead>
+                <tr>
+                  <th>
+                    <label class="container2" for="allpersons">All
+                      <input type="checkbox"
+                             id="allpersons"
+                             name="allpersons"
+                             class="allperson"
+                             value="allpersons"
+                             (click)="toggleSelect($event)"/>
+                      <span class="checkmark2"></span>
+                    </label>
+                  </th>
+                  <th width="30%">NAME</th>
+                  <th>CONTACT INFO</th>
+                  <th>COMPANY</th>
+                  <th>DEPARTMENT</th>
+                  <th>COUNTRY</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let data of contactHistory">
+                  <td>
+                    <label class="container2" for="{{data.people_data_id}}">
+                      <input type="checkbox" name="person_name[{{i}}]"
+                             [checked]="data.selected"
+                             value="neighbourhood.selected"
+                             id="{{data.people_data_id}}"
+                             (change)="data.selected = !(data.selected)"/>
+                      <span class="checkmark2"></span>
+                    </label>
+                  </td>
+                  <td>
+                    <a style="text-decoration: none;"
+                       (click)="lgModal.show(); getContactObjInfo(data)">
+                      <b style="font-size: 12px;">{{data.full_name}}</b><br/>
+                    </a>
+                    Designation: <b>{{data.designation_info}}</b>
+                  </td>
+                  <td>
+                    P:{{data.contact_number}} <br/>
+                    E:<span style="text-decoration: underline; font-weight: 700">{{data.email_id}}</span>
+                  </td>
+                  <td>{{data.company}}</td>
+                  <td>{{data.department}}</td>
+                  <td><span style="color: green; font-weight: 700">{{data.country }}</span>
+                    <sup>[{{ data.state }}]</sup></td>
+                </tr>
+                </tbody>
+              </table>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="widget">
+
+    <!------------------------------- CONTACT MODAL --------------------------------------------------------->
+
+    <div bsModal #lgModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 id="dialog-sizes-name1" class="modal-title pull-left">
+              CONTACT PERSON - <span class="text-uppercase" style="color: #174354;"><b>{{historyModel.full_name}}</b></span>
+            </h4>
+            <button type="button" class="close pull-right" (click)="lgModal.hide()" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <table width="100%">
+              <tr>
+                <td width="70%">
+                  <table style="font-size:12px;">
+                    <tr>
+                      <td colspan="2"><div style="font-size:24px;">{{historyModel.full_name}}</div></td>
+                    </tr>
+                    <tr>
+                      <td colspan="2"><div style="font-size:16px; margin-bottom:10px;">{{historyModel.designation_info}}</div></td>
+                    </tr>
+                    <tr>
+                      <td><strong>EMAIL: </strong></td>
+                      <td>{{historyModel.email_id}}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>CONTACT: </strong></td>
+                      <td>{{historyModel.contact_number}}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>LINKEDIN: </strong></td>
+                      <td><a [href]="historyModel.linkedin" target="_blank" style="text-decoration: underline;">{{historyModel.linkedin}}</a></td>
+                    </tr>
+                  </table>
+                </td>
+                <td width="30%">
+                  <table style="font-size:12px;">
+                    <tr>
+                      <td colspan="2"><div style="font-size:18px; margin-bottom: 10px;">{{historyModel.company}}</div></td>
+                    </tr>
+                    <tr>
+                      <td><strong>WEBSITE: </strong></td>
+                      <td>{{historyModel.company_website}}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>DEPARTMENT: </strong></td>
+                      <td>{{historyModel.department}}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>LOCATION: </strong></td>
+                      <td>{{historyModel.country_name}} ({{historyModel.state}})</td>
+                    </tr>
+                    <tr>
+                      <td><strong>INDUSTRY: </strong></td>
+                      <td>{{historyModel.industry}}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>DOMAIN: </strong></td>
+                      <td>{{historyModel.domain}}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>COMPANY SIZE: </strong></td>
+                      <td>{{historyModel.company_size}}</td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+            <div>&nbsp;</div>
+            <div>
+              <div id="" class="modal-title pull-left bg-secondary" style="width:100%; padding: 10px; margin-bottom:10px; font-size:16px;">
+                COMPANY - <span class="text-uppercase" style="color: #174354;"><b>{{historyModel.companyName}}</b></span>
+              </div>
+              <table width="100%" class="" style="font-size:12px;">
+                <tr>
+                  <td width="70%">
+                    <table cellspacing="5">
+                      <tr>
+                        <td><strong>LOCATION: </strong></td>
+                        <td>{{historyModel.companyLocation}}</td>
+                      </tr>
+                      <tr>
+                        <td><strong>CITY: </strong></td>
+                        <td>{{historyModel.companyCity}}</td>
+                      </tr>
+                      <tr>
+                        <td><strong>STATE: </strong></td>
+                        <td>{{historyModel.companyState}}</td>
+                      </tr>
+                      <tr>
+                        <td><strong>TECHNOLOGY USED: </strong></td>
+                        <td>{{historyModel.companyTechnologyUsed}}</td>
+                      </tr>
+                    </table>
+                  </td>
+                  <td width="30%">
+                    <table cellspacing="5">
+                      <tr>
+                        <td><strong>BUDGET <sup>(USD Million)</sup>: </strong></td>
+                        <td>{{historyModel.companyBudget}}</td>
+                      </tr>
+                      <tr>
+                        <td><strong>EMPLOYEES: </strong></td>
+                        <td>{{historyModel.companyEmployees}}</td>
+                      </tr>
+                      <tr>
+                        <td><strong>REV <sup>(USD Billion)</sup>: </strong></td>
+                        <td>{{historyModel.companyRev}}</td>
+                      </tr>
+                      <tr>
+                        <td><strong>Decision Makers: </strong></td>
+                        <td>{{historyModel.companyDecisionMakers}}</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <div class="modal-footer"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<app-user-footer></app-user-footer>

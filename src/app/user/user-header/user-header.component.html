@@ -1,0 +1,189 @@
+<div class="top-bar style2">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+        <a routerLink="/">
+          <img src="{{assetsPath}}images/logo_180x.png" class="img-responsive" style="width:240px;"/>
+        </a>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+        <div class="form-group droplist" *ngIf="((route1 !== currentRoute) && (route2 !== currentRoute) && (route3 !== currentRoute) && (route4 !== currentRoute))" style="margin-top: 15px;">
+          <ng-template #rt let-r="result" let-t="term">
+            <div class="row">
+              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                {{r.name}} <sup>(+{{r.count}})</sup>&nbsp;
+                <span [style.color]="(r.type == 'company' ? '#4286f4' : '') ||
+                         (r.type == 'country' ? '#db1c5c' : '') ||
+                         (r.type == 'designation_info' ? '#db711c' : '') ||
+                         (r.type == 'industry' ? '#fea636' : '') ||
+                         (r.type == 'full_name' ? '#2ab526' : '') ||
+                         (r.type == 'domain' ? '#2682b5' : '') ||
+                         (r.type == 'state' ? '#78db1c' : '')">
+            {{r.type === 'full_name' ? 'People' : ''}}
+            {{r.type === 'designation_info' ? 'Designation' : ''}}
+            {{r.type === 'country' ? 'Country' : ''}}
+            {{r.type === 'domain' ? 'Domain' : ''}}
+            {{r.type === 'state' ? 'State' : ''}}
+            {{r.type === 'company' ? 'Company' : ''}}
+            {{r.type === 'department' ? 'Department' : ''}}
+            {{r.type === 'industry' ? 'Industry' : ''}}
+            {{r.type === 'lms' ? 'LMS' : ''}}
+          </span>
+              </div>
+            </div>
+          </ng-template>
+          <input id="typeahead-http" style="border-radius:0px;"
+                 type="text"
+                 class="form-control"
+                 [class.is-invalid]="searchFailed"
+                 [(ngModel)]="model"
+                 [ngbTypeahead]="search"
+                 (selectItem)="onSelectSearch($event)"
+                 [resultTemplate]="rt"
+                 [inputFormatter]="formatter"
+                 placeholder="Find people, companies, designation.."/>
+          <div class="load-bar" *ngIf="searching">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            MENU <i class="fa fa-bars fa-lg"></i>
+          </button>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a *ngIf="!isAuthorized" routerLink="/user/login">LOGIN</a></li>
+            <li><a *ngIf="!isAuthorized" routerLink="/user/signup">REGISTER</a></li>
+            <li><a routerLink="/user/about-us">ABOUT US</a></li>
+            <li><a routerLink="/user/our-services">OUR SERVICES</a></li>
+            <li><a routerLink="/user/why-datakart">WHY DATAKART</a></li>
+            <li>
+              <a routerLink="/user/checkout">CART <i class="fa fa-shopping-cart" style="font-size: 14px;">&nbsp;
+                <span *ngIf="totalNumberOfList !== undefined" class="badge"><b>{{totalNumberOfList}}</b></span></i>
+              </a>
+            </li>
+            <li class="dropdown" *ngIf="isAuthorized">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                Me <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu">
+                <li><div style="padding:10px 15px; text-transform: uppercase;">{{firstName}} {{lastName}}</div></li>
+                <li role="separator" class="divider"></li>
+                <li><a routerLink="/user/purchase-history"><i class="fa fa-shopping-cart"></i> Purchase History</a></li>
+                <li><a routerLink="/user/setting"><i class="fa fa-gears"></i> Account Setting</a></li>
+                <li role="separator" class="divider"></li>
+                <li><div style="padding:10px 15px;"><a class="view-all" (click)="logoutAccount()"><i class="fa fa-power-off"></i> Logout</a></div></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <!--<div class="quick-links">
+          <ul>
+            <li [hidden]="!isAuthorized">
+              <a title="" class="sky-skin">Me</a>
+              <div class="dialouge notification" style="display: none;">
+                <span style="font-size: 12px;">{{firstName}} {{lastName}}</span>
+                <a routerLink="/user/purchase-history"><i class="fa fa-shopping-cart"></i> Purchase History</a>
+                <a routerLink="/user/setting"><i class="fa fa-gears"></i> Account Setting</a>
+                <a class="view-all" (click)="logoutAccount()">Logout</a>
+              </div>
+            </li>
+          </ul>
+        </div>-->
+      </div>
+    </div>
+  </div>
+
+
+  <!--------------------------------------------------------------------------->
+  <!--<div class="search-form" *ngIf="((route1 !== currentRoute) && (route2 !== currentRoute))">-->
+  <!--<ng-template #customItemTemplate let-model="item" let-index="index">-->
+  <!--<span style="font-size: 12px; padding: 12px;">-->
+  <!--<span>{{model.name}}-->
+  <!--<sup style="font-size: 10px;">({{ model.count }}+ contacts)-->
+  <!--<b [style.color]="(model.type == 'company' ? '#4286f4' : '') ||-->
+  <!--(model.type == 'country' ? '#db1c5c' : '') ||-->
+  <!--(model.type == 'designation_info' ? '#db711c' : '') ||-->
+  <!--(model.type == 'full_name' ? '#2ab526' : '') ||-->
+  <!--(model.type == 'domain' ? '#2682b5' : '') ||-->
+  <!--(model.type == 'state' ? '#78db1c' : '')">-->
+  <!--{{model.type === 'full_name' ? 'People' : ''}}-->
+  <!--{{model.type === 'designation_info' ? 'Designation' : ''}}-->
+  <!--{{model.type === 'country' ? 'Country' : ''}}-->
+  <!--{{model.type === 'domain' ? 'Domain' : ''}}-->
+  <!--{{model.type === 'state' ? 'State' : ''}}-->
+  <!--{{model.type === 'company' ? 'Company' : ''}}-->
+  <!--{{model.type === 'department' ? 'Department' : ''}}-->
+  <!--{{model.type === 'lms' ? 'LMS' : ''}}-->
+  <!--</b>-->
+  <!--</sup>-->
+  <!--</span>-->
+  <!--</span>-->
+  <!--</ng-template>-->
+  <!--<input [(ngModel)]="selectedValue"-->
+  <!--[typeahead]="peopleSearchList"-->
+  <!--typeaheadOptionField="name"-->
+  <!--(typeaheadOnSelect)="onSelectSearch($event);"-->
+  <!--[typeaheadScrollable]="false"-->
+  <!--class="form-control input-sm"-->
+  <!--placeholder="Find contacts and companies"-->
+  <!--[typeaheadItemTemplate]="customItemTemplate"-->
+  <!--(keyup)="searchTerm$.next($event.target.value); loading = true"-->
+  <!--[typeaheadWaitMs]="3000"-->
+  <!--required>-->
+  <!--<div class="load-bar" *ngIf="loading">-->
+  <!--<div class="bar"></div>-->
+  <!--<div class="bar"></div>-->
+  <!--<div class="bar"></div>-->
+  <!--</div>-->
+  <!--</div>-->
+
+
+
+
+  <!--------------------------------------------------------------------------->
+
+</div><!-- Top Bar -->
+<header class="horizontal-menu">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
+        <ul class="links">
+          <li>
+            <a routerLink="/">HOME</a>
+          </li>
+          <li class="menu-item-has-children">
+            <a routerLink="/user/store" title="">LIST</a>
+          </li>
+          <li class="menu-item-has-children">
+            <a routerLink="/user/people-search" title="">PEOPLE SEARCH</a>
+          </li>
+          <li class="menu-item-has-children">
+            <a *ngIf="isAuthorized" routerLink="/user/history" title="">CONTACT HISTORY</a>
+          </li>
+          <li class="menu-item-has-children">
+            <a routerLink="/user/lead-search" title="">LEAD SEARCH</a>
+          </li>
+          <!--<li class="menu-item-has-children" >-->
+          <!--</li>-->
+        </ul>
+      </div>
+      <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+        <div *ngIf="isAuthorized">
+          <a class="credit" style="">Credit Left
+            <b>
+                <span [style.color]="creditsDetails.credits_left < 50 ? 'red' : '#ffffff'">
+                  {{creditsDetails.credits_left}}
+                </span>/{{creditsDetails.total_credits}}
+            </b>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

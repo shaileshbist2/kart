@@ -1,0 +1,111 @@
+<app-user-header [creditsDetails]="creditsDetails"></app-user-header>
+<!--<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '1px', size: '12px;' }"></ngx-loading>-->
+<div class="panel-content" style="padding-top: 50px;">
+  <div class="heading-sec">
+    <div class="col-md-12 col-sm-12 column">
+      <div class="heading-profile">
+        <h2>
+          <i class="fa fa-book"></i>&nbsp;CONTACT BUSINESS CARD
+          <a routerLink="/user/people-search" style="font-size: 12px;"
+             class="btn btn-default btn-sm pull-right">
+            <i class="fa fa-arrow-left"></i> Back to search
+          </a>
+        </h2>
+      </div>
+    </div>
+  </div>
+  <div class="heading-sec">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+      <div class="widget no-color">
+        <div class="services style3">
+          <span class="purple-skin"><i class="fa fa-gg"></i></span>
+          <div class="service-detail">
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <h2 style="font-size: 22px;">
+                {{contactModel.full_name}}
+                <div class="form-group" style="font-size: 12px; padding: 2px;">{{contactModel.designation_info}}</div>
+                <div [class]="contactModel.email_id == 'N/A' ? 'blurry-text' : ''"
+                     style="font-size: 12px; padding: 2px; text-decoration: underline;">
+                  {{contactModel.email_id}}
+                </div>
+                <div [class]="contactModel.contact_number == 'N/A' ? 'blurry-text' : ''"
+                     style="font-size: 12px; padding: 4px;">{{contactModel.contact_number}}
+                </div>
+                <div [class]="contactModel.linkedin == 'N/A' ? 'blurry-text' : ''"
+                     style="font-size: 12px; padding: 4px;">
+                  <a href="{{contactModel.linkedin}}"
+                     *ngIf="contactModel.linkedin !== 'N/A'"
+                     target="_blank">
+                    {{contactModel.linkedin}}
+                  </a>
+                </div>
+              </h2>
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-12" style="padding-top: 40px;">
+              <div class="pull-right">
+                <h4>{{contactModel.company}}</h4>
+                <div style="font-size: 12px; padding: 2px;">DEPARTMENT - <b>{{contactModel.department}}</b></div>
+                <div style="font-size: 12px; padding: 2px;">INDUSTRY - <b>{{contactModel.industry}}</b></div>
+                <div style="font-size: 12px; padding: 2px;">COMPANY URL -
+                  <u><b><a href="{{contactModel.company_website}}"
+                           target="_blank">{{contactModel.company_website}}
+                  </a></b></u>
+                </div>
+                <div style="font-size: 12px; padding: 2px;">DOMAIN - <b>{{contactModel.domain}}</b></div>
+                <div style="font-size: 12px; padding: 2px;">COMPANY SIZE - <b>{{contactModel.company_size}}</b>
+                </div>
+                <div style="font-size: 12px; padding: 2px;">STATE - <b>{{contactModel.state}}</b></div>
+                <div style="font-size: 12px; padding: 2px;">COUNTRY - <b>{{contactModel.country}}</b></div>
+                <div style="font-size: 10px; padding: 2px; color:#5e5e5e;">LAST UPDATED -
+                  <b>{{contactModel.updated_at}}</b>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 col-sm-12 col-xs-12" style="padding-top: 15px;">
+              <hr/>
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <button style="font-size: 12px;"
+                        class="btn btn-default btn-sm pull-right"
+                        *ngIf="contactModel.is_purchased == 'false'"
+                        (click)="purchaseContactNow_user(contactModel.people_data_id)">
+                  <div class="load-bar" style="margin-top: -5px;" *ngIf="loading">
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                  </div>
+                  <i class="fa fa-credit-card"></i> Get this contact at {{contactModel.per_lead_credits}} Credits
+                </button>
+              </div>
+            </div>
+          </div>
+        </div><!-- Services -->
+      </div>
+    </div>
+
+
+    <!------------------------ MODAL -------------------------------------------------------------->
+    <div bsModal #smModal="bs-modal"
+         class="modal fade"
+         tabindex="-1"
+         role="dialog"
+         aria-labelledby="dialog-sizes-name2">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <!--<h4 id="dialog-sizes-name2" class="modal-title pull-left"></h4>-->
+            <button type="button" class="close pull-right" aria-label="Close" (click)="smModal.hide()">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Oh no! Looks like you don't have enough credits to search... Let's fix this!
+          </div>
+          <div class="modal-footer">
+            <a routerLink="/user/price" class="btn btn-default btn-sm" (click)="smModal.hide()">YES</a>
+            <button class="btn btn-default btn-sm" (click)="smModal.hide()">NO</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,30 @@
+<app-user-header></app-user-header>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '1px', size: '12px;' }"></ngx-loading>
+
+<div class="panel-content" style="padding-top: 50px;">
+  <div class="heading-sec">
+    <div class="row">
+      <div class="col-md-12 column text-center">
+        <div class="heading-profile">
+          <h1>
+            My deliciously simple rates
+          </h1>
+          <span>I will be your most devoted growth hacking companion. Pick a plan and let's get started!</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="heading-sec">
+    <div class="col-md-4" *ngFor="let data of creditList">
+      <ul class="price-table">
+        <li class="price-title text-capitalize"><i class="fa fa-area-chart"></i>    {{data.title}}</li>
+        <li class="price-rate"><h3><span>$</span>{{data.price}}<i><!--p/m--></i></h3></li>
+        <!--<li class="price-description">Lorem ipsum dolor sit amet, cotyns ectetuer to ballon</li>-->
+        <li class="price-features"><i class="fa fa-hdd-o"></i> {{data.credits}} Credits</li>
+        <li class="price-signup"><a title="" (click)="continueToPayBtn(data.price, data.credits, data)"> Continue</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<app-user-footer></app-user-footer>

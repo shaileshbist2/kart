@@ -1,0 +1,83 @@
+<header class="main-header">
+  <!-- Logo -->
+  <a routerLink="/admin/dashboard" class="logo">
+    <span class="logo-mini">
+      <img src="{{assetsPath}}images/for_stripe.png" width="50">
+    </span>
+    <!--<span class="logo-lg"><b>DATA</b>KART</span>-->
+    <img src="{{assetsPath}}images/logo_180x.png" width="200">
+  </a>
+  <nav class="navbar navbar-static-top">
+    <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+      <span class="sr-only">Toggle navigation</span>
+    </a>
+    <div class="navbar-custom-menu">
+      <ul class="nav navbar-nav">
+        <li class="dropdown user user-menu">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <!--<img src="{{assetsPath}}images/logo_180x.png" class="user-image">-->
+            <span class="hidden-xs">{{adminFullName}}</span>
+          </a>
+          <ul class="dropdown-menu">
+            <!--<li class="user-header">-->
+              <!--<img src="dist/img/user2-160x160.jpg" class="img-circle">-->
+              <!--<p>-->
+                <!--Shailesh Bist - Admin Controller-->
+              <!--</p>-->
+            <!--</li>-->
+            <li class="user-footer">
+              <div class="pull-left">
+                <a href="#" class="btn btn-default btn-flat">Profile</a>
+              </div>
+              <div class="pull-right">
+                <a (click)="logout()" class="btn btn-default btn-flat">Sign out</a>
+              </div>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>
+<aside class="main-sidebar">
+  <section class="sidebar">
+    <ul class="sidebar-menu" data-widget="tree">
+      <li>
+        <a routerLink="/admin/dashboard">
+          <i class="fa fa-dashboard"></i>
+          <span>Dashboard</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/admin/manage-people">
+          <i class="fa fa-users"></i>
+          <span>Manage People</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/admin/manage-field">
+          <i class="fa fa-newspaper-o"></i>
+          <span>Manage Field</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/admin/manage-customer">
+          <i class="fa fa-users"></i>
+          <span>Manage Customer</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/admin/upload">
+          <i class="fa fa-upload"></i>
+          <span>Upload</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/admin/validate">
+          <i class="fa fa-database"></i>
+          <span>Validate Data</span>
+        </a>
+      </li>
+    </ul>
+  </section>
+</aside>

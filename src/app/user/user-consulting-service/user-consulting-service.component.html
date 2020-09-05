@@ -1,0 +1,25 @@
+<app-user-header></app-user-header>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '1px', size: '12px;' }"></ngx-loading>
+<div class="panel-content" style="padding-top: 70px;">
+
+
+  <div class="col-md-2">&nbsp;</div>
+  <div class="col-md-8" style="background: #ffffff; padding: 12px;">
+    <div class="col-md-12">
+      <h2>Sellosphere Business Consulting Services - Townscript</h2>
+    </div>
+    <div class="col-md-12 alert successMsg alert-success" style="display: none;">
+      <strong>Payment successfully done</strong>
+    </div>
+    <div class="col-md-12 alert failedMsg alert-danger" style="display: none;">
+      <strong>Payment Failed</strong>
+    </div>
+    <div class="col-md-12" style="text-align: justify; font-size: 24px;">
+      <button mat-raised-button
+              (click)="continueToPayBtn(113000)">
+        Buy <i class="fa fa-dollar"></i>1,130.00/-
+      </button>
+    </div>
+  </div>
+  <div class="col-md-2">&nbsp;</div>
+</div>

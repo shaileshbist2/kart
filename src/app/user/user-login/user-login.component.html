@@ -1,0 +1,92 @@
+<div class="account-user-sec">
+  <div class="account-sec">
+    <div class="account-top-bar">
+      <div class="container-fluid">
+        <div class="logo">
+          <a routerLink="/">
+            <img src="{{assetsPath}}images/logo_180x.png" style="width: 227px;"/>
+          </a>
+        </div>
+        <ul class="account-header-link">
+          <li><a title="" routerLink="/">HOME</a></li>
+          <li><a title="" routerLink="/user/signup/">REGISTER</a></li>
+          <li><a title="" routerLink="/user/why-datakart/">WHY DATAKART</a></li>
+          <li><a title="" routerLink="/user/our-services/">OUR SERVICES</a></li>
+          <li><a title="" routerLink="/user/about-us/">ABOUT US</a></li>
+          <li><a title="" routerLink="/user/forgot-password/">Forgot Password</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="acount-sec">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="account-detail">
+              <ul>
+                <li>
+                  <h3><i class="fa  fa-television"></i> Keep everything Sync</h3>
+                  <p>Discover innovative companies and the people behind them</p>
+                </li>
+                <li>
+                  <h3><i class="fa fa-map-o"></i> Advance Search</h3>
+                  <p>Find, track, and analyze the companies you care about.</p>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md-8">
+            <div class="col-md-12 col-sm-12 col-xs-12 load-bar" *ngIf="loading">
+              <div class="bar"></div>
+              <div class="bar"></div>
+              <div class="bar"></div>
+            </div>
+            <div class="contact-sec">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="widget-title">
+                    <h3>LOGIN</h3>
+                    <span>Fill your detail to get in</span>
+                  </div><!-- Widget title -->
+                  <div class="account-form">
+                    <span style="color: red; font-size: 12px;" class="pull-right">{{errorMsg}}</span>
+                    <form novalidate #loginForm="ngForm" class="loginForm">
+                      <div class="row">
+                        <div class="feild col-md-12">
+                          <input type="text" placeholder="Email Id" name="email_id"
+                                 required
+                                 #email_id="ngModel" [(ngModel)]="loginModel.email_id"/>
+                        </div>
+                        <div class="feild col-md-12">
+                          <input type="password" placeholder="Password" name="password"
+                                 required
+                                 #password="ngModel" [(ngModel)]="loginModel.password"/>
+                        </div>
+                        <div class="feild col-md-6">
+                          <input type="submit" value="Login Now"
+                                 (click)="login_user()"
+                                 [disabled]="loginForm.invalid"/>
+                        </div>
+                        <div class="feild col-md-6" style="padding-top: 25px;">
+                          <a routerLink="/user/forgot-password">Forgot password?</a>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="more-option">
+                    <span>OR</span>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="creat-an-account">
+                    <span>Don't have an account?</span>
+                    <a routerLink="/user/signup" title="" style="color: #ffffff; text-decoration: none;">Create An Account</a>
+                  </div><!-- Create an account -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!-- Account Sec -->
+</div>

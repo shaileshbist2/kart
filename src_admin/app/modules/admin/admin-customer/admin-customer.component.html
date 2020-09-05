@@ -1,0 +1,206 @@
+<div class="wrapper">
+  <app-admin-header></app-admin-header>
+  <div class="content-wrapper">
+    <section class="content-header">
+      <h1>
+        Manage Customer
+        <button class="btn btn-default btn-sm pull-right"
+                (click)="addNewUserBtn()">
+          Add New User
+        </button>
+      </h1>
+    </section>
+    <section class="content">
+      <div class="row">
+        <div class="col-md-12 col-sm-12">
+          <div class="box box-primary" *ngIf="createUpdateUserForm">
+            <div class="box-header with-border">
+              <h3 class="box-title">
+                <i class="fa fa-user"></i> Add New Customer
+              </h3>
+              <button class="btn btn-default btn-sm pull-right"
+                      (click)="closeFormBtn()">
+                Close
+              </button>
+            </div>
+            <div class="box-body">
+              <div class="col-md-12 col-sm-12">
+                <form novalidate
+                      #customerForm="ngForm"
+                      class="customerForm">
+                  <div class="col-md-3 col-sm-3 form-group">
+                    <label>First Name:</label>
+                    <div class="input-group">
+                      <div class="input-group-addon">
+                        <i class="fa fa-user"></i>
+                      </div>
+                      <input type="text"
+                             class="form-control input-sm"
+                             placeholder="First Name"
+                             name="firstName"
+                             [(ngModel)]="userModel.first_name"
+                             #firstName="ngModel"
+                             required>
+                    </div>
+                  </div>
+                  <div class="col-md-3 col-sm-3 form-group">
+                    <label>Last Name:</label>
+                    <div class="input-group">
+                      <div class="input-group-addon">
+                        <i class="fa fa-user"></i>
+                      </div>
+                      <input type="text"
+                             class="form-control input-sm"
+                             placeholder="Last Name"
+                             name="lastName"
+                             [(ngModel)]="userModel.last_name"
+                             #lastName="ngModel"
+                             required>
+                    </div>
+                  </div>
+                  <div class="col-md-3 col-sm-3 form-group">
+                    <label>Email Id:</label>
+                    <div class="input-group">
+                      <div class="input-group-addon">
+                        <i class="fa fa-envelope"></i>
+                      </div>
+                      <input type="text"
+                             class="form-control input-sm"
+                             placeholder="Email Id"
+                             name="emailId"
+                             [(ngModel)]="userModel.email_id"
+                             #emailId="ngModel"
+                             required>
+                    </div>
+                  </div>
+                  <div class="col-md-3 col-sm-3 form-group">
+                    <label>Password:</label>
+                    <div class="input-group">
+                      <div class="input-group-addon">
+                        <i class="fa fa-key"></i>
+                      </div>
+                      <input type="password"
+                             class="form-control input-sm"
+                             placeholder="Password"
+                             name="password"
+                             [(ngModel)]="userModel.password"
+                             #password="ngModel">
+                    </div>
+                  </div>
+                  <div class="col-md-3 col-sm-3 form-group">
+                    <label>Mobile Number:</label>
+                    <div class="input-group">
+                      <div class="input-group-addon">
+                        <i class="fa fa-mobile"></i>
+                      </div>
+                      <input type="text"
+                             class="form-control input-sm"
+                             placeholder="Mobile Number"
+                             name="contactNumber"
+                             [(ngModel)]="userModel.mobile_number"
+                             #contactNumber="ngModel"
+                             (keypress)="onlyNumberAllowed($event)"
+                             [maxlength]="14">
+                    </div>
+                  </div>
+                  <div class="col-md-3 col-sm-3 form-group">
+                    <label>Add Credits: [{{+userModel.credits_left + +userModel.add_credits}}]</label>
+                    <div class="input-group">
+                      <div class="input-group-addon">
+                        <i class="fa fa-credit-card"></i>
+                      </div>
+                      <input type="text"
+                             class="form-control input-sm"
+                             placeholder="Credits"
+                             name="credits"
+                             [(ngModel)]="userModel.add_credits"
+                             #credits="ngModel"
+                             [maxlength]="5"
+                             (keypress)="onlyNumberAllowed($event)">
+                    </div>
+                  </div>
+                  <div class="col-md-12 col-sm-12 form-group">
+                    <label>&nbsp;</label>
+                    <div class="input-group">
+                      <input type="submit"
+                             *ngIf="saveBtn"
+                             [disabled]="customerForm.invalid"
+                             class="btn btn-default btn-md"
+                             value="Save"
+                             (click)="createUser_a()"/>
+                      <input type="submit"
+                             *ngIf="updateBtn"
+                             [disabled]="customerForm.invalid"
+                             class="btn btn-default btn-md"
+                             value="Update"
+                             (click)="updateUser_a()"/>&nbsp;&nbsp;
+                      <span style="color: green">{{successMsg}}</span>
+                      <span style="color: red">{{errorMsg}}</span>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <div class="box box-primary">
+            <div class="box-body">
+              <form #f="ngForm" novalidate>
+                <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+                       class="table table-bordered dt-responsive table-hover display table-responsive" cellspacing="0"
+                       width="100%" style="font-size: 12px;">
+                  <thead>
+                  <tr>
+                    <!--<th style="width: 20px;">-->
+                    <!--<label class="container2" for="allpersons">All-->
+                    <!--<input type="checkbox" id="allpersons" name="allpersons" value="allpersons"-->
+                    <!--(click)="toggleSelect($event)"/>-->
+                    <!--<span class="checkmark2"></span>-->
+                    <!--</label>-->
+                    <!--</th>-->
+                    <th>NAME</th>
+                    <th>EMAIL</th>
+                    <th>MOBILE</th>
+                    <th>CREDIT LEFT</th>
+                    <th>EMAIL VERIFIED</th>
+                    <th>CREATED AT</th>
+                    <th>VIEW/Edit</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr *ngFor="let user of users">
+                    <!--<td width="20">-->
+                    <!--<label class="container2" for="{{person.people_data_id}}">-->
+                    <!--<input type="checkbox" name="person_name[{{i}}]" [checked]="person.selected"-->
+                    <!--value="neighbourhood.selected" id="{{person.people_data_id}}"-->
+                    <!--(change)="person.selected = !(person.selected)"/>-->
+                    <!--<span class="checkmark2"></span>-->
+                    <!--</label>-->
+                    <!--</td>-->
+                    <td class="text-capitalize" width="200">{{ user.first_name + ' ' + user.last_name}}</td>
+                    <td>{{ user.email_id }}</td>
+                    <td>{{ user.country_code + user.mobile_number }}</td>
+                    <td>{{ user.credits_left }}</td>
+                    <td width="100">{{ user.email_verified === '1' ? 'Yes' : 'No' }}</td>
+                    <td>{{ user.created_at }}</td>
+                    <td class="text-center" width="100">
+                      <!--<button class="btn btn-default btn-xs">-->
+                        <!--<i class="fa fa-info-circle" style="font-size: 13px; color:green;"></i>-->
+                      <!--</button>-->
+                      <button class="btn btn-default btn-xs"
+                              (click)="getUserDetail_a(user.user_id)">
+                        <i class="fa fa-edit" style="font-size: 13px; color:green;"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <app-admin-footer></app-admin-footer>
+</div>

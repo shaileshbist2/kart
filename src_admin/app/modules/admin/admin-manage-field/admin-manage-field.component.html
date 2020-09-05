@@ -1,0 +1,113 @@
+<div class="wrapper">
+  <app-admin-header></app-admin-header>
+  <div class="content-wrapper">
+    <section class="content-header">
+      <h1>Manage People</h1>
+    </section>
+    <section class="content">
+      <div class="row">
+        <div class="col-md-5 col-sm-5">
+          <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">
+                <i class="fa fa-columns"></i> Add Field
+              </h3>
+            </div>
+            <div class="box-body">
+              <div class="col-md-12 col-sm-12">
+                <div class="alert alert-danger"
+                     style="padding: 3px;"
+                     *ngIf="errorView">
+                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                  <h5><i class="icon fa fa-ban"></i> {{error}}</h5>
+                </div>
+                <div class="alert alert-success"
+                     style="padding: 3px;"
+                     *ngIf="successMsg">
+                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                  <h5>{{successMsg}}</h5>
+                </div>
+                <form [formGroup]="peopleForm">
+                  <div formArrayName="form_fields">
+                    <label>Add New Fields</label>
+                    <button class="btn btn-sm btn-success pull-right" (click)="addNewField()">
+                      <i class="fa fa-plus"></i>
+                    </button>
+                    <div class="row">&nbsp;</div>
+                    <div *ngFor="let item of formFields.controls; let pointIndex=index"
+                         [formGroupName]="pointIndex">
+                      <div class="input-group input-group-sm form-group">
+                        <input type="text"
+                               formControlName="column_name"
+                               class="form-control"
+                               [ngClass]="{ 'is-invalid': submitted && item.column_name }"/>
+                        <div class="input-group-btn">
+                          <button type="button"
+                                  (click)="deleteField(pointIndex)"
+                                  class="btn btn-danger btn-flat"><i class="fa fa-remove"></i></button>
+                        </div>
+                      </div>
+                    </div>
+                    <button class="btn btn-success btn-sm"
+                            (click)="addNewField_a()"
+                            [disabled]="!peopleForm.valid">
+                      Save
+                      <span *ngIf="spinner">
+                          <i class="fa fa-spinner fa-spin"></i> Please wait...
+                        </span>
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-7 col-sm-7">
+          <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">
+                <i class="fa fa-columns"></i> Fields
+              </h3>
+            </div>
+            <div class="box-body">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <span *ngFor="let data of columnListData">
+                    <span class="badge" style="background: #427b9d;">
+                      {{data.COLUMN_NAME}}
+                      &nbsp;&nbsp;<i class="fa fa-remove" style="cursor: pointer;" *ngIf="((data.COLUMN_NAME === 'people_data_id') ||
+                                                                              (data.COLUMN_NAME === 'company') ||
+                                                                              (data.COLUMN_NAME === 'company_website') ||
+                                                                              (data.COLUMN_NAME === 'industry') ||
+                                                                              (data.COLUMN_NAME === 'domain') ||
+                                                                              (data.COLUMN_NAME === 'company_size') ||
+                                                                              (data.COLUMN_NAME === 'city') ||
+                                                                              (data.COLUMN_NAME === 'state') ||
+                                                                              (data.COLUMN_NAME === 'zip_code') ||
+                                                                              (data.COLUMN_NAME === 'country_name') ||
+                                                                              (data.COLUMN_NAME === 'country') ||
+                                                                              (data.COLUMN_NAME === 'full_name') ||
+                                                                              (data.COLUMN_NAME === 'person_first_name') ||
+                                                                              (data.COLUMN_NAME === 'person_last_name') ||
+                                                                              (data.COLUMN_NAME === 'designation_info') ||
+                                                                              (data.COLUMN_NAME === 'management_level') ||
+                                                                              (data.COLUMN_NAME === 'department') ||
+                                                                              (data.COLUMN_NAME === 'linkedin') ||
+                                                                              (data.COLUMN_NAME === 'email_id') ||
+                                                                              (data.COLUMN_NAME === 'contact_number') ||
+                                                                              (data.COLUMN_NAME === 'address_1') ||
+                                                                              (data.COLUMN_NAME === 'address_2') ||
+                                                                              (data.COLUMN_NAME === 'secondary_email') ||
+                                                                              (data.COLUMN_NAME === 'updated_at') ||
+                                                                              (data.COLUMN_NAME === 'created_at')
+                                                                              ) ? '' : data.COLUMN_NAME"></i>
+                    </span>&nbsp;
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <app-admin-footer></app-admin-footer>
+</div>

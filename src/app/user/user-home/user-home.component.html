@@ -1,0 +1,408 @@
+<app-user-header></app-user-header>
+<!--<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '1px', size: '12px;' }"></ngx-loading>-->
+
+<div class="panel-content">
+  <div class="box">
+    <i class="fa fa-envelope contact-us"></i>
+  </div>
+
+  <div class="container-fluid top-bg">
+    <div class="row">
+  <div class="col-md-12 col-sm-12 text-center form-group">
+    <div style="color: #ffffff; font-size:28px;">The right business connection is just
+      a click away
+    </div>
+  </div>
+  <!--<div class="col-md-6 col-sm-4 col-md-offset-3 col-sm-offset-4 form-group">-->
+  <!--<div class="search-form">-->
+  <!--<ng-template #customItemTemplate let-model="item" let-index="index">-->
+  <!--<span style="font-size: 14px; padding: 12px;">-->
+  <!--<span>{{model.name}}-->
+  <!--<sup style="font-size: 10px;">({{ model.count }}+ contacts)&nbsp;-->
+  <!--<b [style.color]="(model.type == 'company' ? '#4286f4' : '') ||-->
+  <!--(model.type == 'country' ? '#db1c5c' : '') ||-->
+  <!--(model.type == 'designation_info' ? '#db711c' : '') ||-->
+  <!--(model.type == 'full_name' ? '#2ab526' : '') ||-->
+  <!--(model.type == 'domain' ? '#2682b5' : '') ||-->
+  <!--(model.type == 'state' ? '#78db1c' : '')">-->
+  <!--{{model.type === 'full_name' ? 'People' : ''}}-->
+  <!--{{model.type === 'designation_info' ? 'Designation' : ''}}-->
+  <!--{{model.type === 'country' ? 'Country' : ''}}-->
+  <!--{{model.type === 'domain' ? 'Domain' : ''}}-->
+  <!--{{model.type === 'state' ? 'State' : ''}}-->
+  <!--{{model.type === 'company' ? 'Company' : ''}}-->
+  <!--{{model.type === 'department' ? 'Department' : ''}}-->
+  <!--{{model.type === 'lms' ? 'LMS' : ''}}-->
+  <!--</b>-->
+  <!--</sup>-->
+  <!--</span>-->
+  <!--</span>-->
+  <!--</ng-template>-->
+  <!--<input [(ngModel)]="selectedValue"-->
+  <!--[typeahead]="peopleSearchList"-->
+  <!--typeaheadOptionField="name"-->
+  <!--(typeaheadOnSelect)="onSelectSearch($event);"-->
+  <!--[typeaheadScrollable]="false"-->
+  <!--class="form-control input-sm"-->
+  <!--placeholder="Find people, companies, designation.."-->
+  <!--[typeaheadItemTemplate]="customItemTemplate"-->
+  <!--(keyup)="searchTerm$.next($event.target.value); loading = true"-->
+  <!--[typeaheadWaitMs]="3000"-->
+  <!--required/>-->
+  <!--<div class="load-bar" *ngIf="loading">-->
+  <!--<div class="bar"></div>-->
+  <!--<div class="bar"></div>-->
+  <!--<div class="bar"></div>-->
+  <!--</div>-->
+  <!--</div>-->
+  <!--</div>-->
+  <div class="col-md-6 col-sm-4 col-md-offset-3 col-sm-offset-4 form-group droplist">
+    <ng-template #rt let-r="result" let-t="term">
+      <div class="row">
+        <div class="col-md-12 col-sm-12">
+          {{r.name}} <sup>(+{{r.count}})</sup>&nbsp;
+          <span [style.color]="(r.type == 'company' ? '#4286f4' : '') ||
+                         (r.type == 'country' ? '#db1c5c' : '') ||
+                         (r.type == 'designation_info' ? '#db711c' : '') ||
+                         (r.type == 'industry' ? '#fea636' : '') ||
+                         (r.type == 'full_name' ? '#2ab526' : '') ||
+                         (r.type == 'domain' ? '#2682b5' : '') ||
+                         (r.type == 'state' ? '#78db1c' : '')">
+            {{r.type === 'full_name' ? 'People' : ''}}
+            {{r.type === 'designation_info' ? 'Designation' : ''}}
+            {{r.type === 'country' ? 'Country' : ''}}
+            {{r.type === 'domain' ? 'Domain' : ''}}
+            {{r.type === 'state' ? 'State' : ''}}
+            {{r.type === 'company' ? 'Company' : ''}}
+            {{r.type === 'department' ? 'Department' : ''}}
+            {{r.type === 'industry' ? 'Industry' : ''}}
+            {{r.type === 'lms' ? 'LMS' : ''}}
+          </span>
+        </div>
+      </div>
+    </ng-template>
+    <input id="typeahead-http"
+           type="text"
+           class="search-main"
+           [class.is-invalid]="searchFailed"
+           [(ngModel)]="model"
+           [ngbTypeahead]="search"
+           (selectItem)="onSelectSearch($event)"
+           [resultTemplate]="rt"
+           [inputFormatter]="formatter"
+           placeholder="Find people, companies, designation.."
+    style="background: #ffffff;"/>
+    <div class="load-bar" *ngIf="searching">
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+    </div>
+    <!--<span *ngIf="searching">searching...</span>-->
+    <div class="invalid-feedback" *ngIf="searchFailed">Sorry, suggestions could not be loaded.</div>
+  </div>
+
+  <!--<div class="col-md-12 col-sm-12 form-group text-center">-->
+  <!--<br/>-->
+  <!--<span *ngFor="let tag of tags">-->
+  <!--<button class="btn btn-primary btn-xs" (click)="clickTag(tag)">{{tag.dynamic_name}}</button>&nbsp;-->
+  <!--</span>-->
+  <!--</div>-->
+
+  <div class="col-md-12 col-sm-12 form-group text-center">
+    <button routerLink="/user/signup" *ngIf="!isAuth" mat-raised-button>
+      GET 20 LEADS FOR FREE
+    </button>
+  </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+        <div class="row">
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="front-lead" style="color: #d03772;">Most Explored Lists</div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" *ngFor="let data of storeList"
+               style="cursor: pointer; outline: none; margin-bottom: 15px;"
+               routerLink="/user/list/{{data.list_config_id}}/{{data.title.split(' ').join('-')+'-'+data.country}}">
+            <div class="row bg-white" style="padding:12px 0px; border-left:1.5px solid #174354;">
+              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <img src="{{data.display_image}}" class="img-responsive img-thumbnail">
+              </div>
+              <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                <div class="data-title">{{data.title}}</div>
+                <button class="btn-price">
+                  <i class="fa fa-dollar"></i>&nbsp;{{data.price}} / Buy
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="front-lead" style="color: #d03772; padding-top: 12px;">Get Credits Now</div>
+        <div class="row">
+          <div class="col-md-4 col-sm-4"
+               *ngFor="let d of creditList">
+            <div class="row">
+              <div class="col-md-12 col-sm-12" style="cursor: pointer; background:#4f7282; color:#fff; border-radius: 5px;" routerLink="/user/price">
+                <h3 class="text-capitalize">{{d.title}}</h3>
+                <h4 style="background: #ffffff;
+                    color: #333333;
+                    padding: 7px;"><i class="fa fa-dollar"></i>{{d.price}}/-</h4>
+                <h4>Get {{d.credits}} Credits</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row get-data">
+          <div class="col-lg-3 col-md-3 col-sm-3 col-sm-12">
+            <div style="color: #333333; text-align: left; font-size:24px;">To Get Data</div>
+          </div>
+          <div class="col-lg-9 col-md-9 col-sm-9 col-sm-12">
+            <div class="alert alert-success col-md-6 col-sm-6 sub_success_msg" style="display: none;">
+              <strong>Thanks for submitting</strong>
+            </div>
+            <form #subscriberform="ngForm" class="subscriberform" novalidate id="subscriberform">
+              <div class="input-group">
+                <input type="text"
+                       [(ngModel)]="subscribeModel.subscriber_email"
+                       class="form-control sub_placeholder"
+                       placeholder="Enter your email id"
+                       style="border:1px solid #eeeeee; box-shadow: none;"
+                       #subscriber_email="ngModel"
+                       name="subscriber_email"
+                       pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$" required/>
+                <span class="input-group-btn">
+              <button class="btn btn-primary"
+                      type="submit"
+                      [disabled]="subscriberform.invalid"
+                      (click)="subscribeNow_user()">
+                  Submit
+              </button>
+            </span>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+        <div class="row">
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="front-lead" style="color: #d03772;">See More Lists</div>
+          </div>
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="bg-white">
+              <div class="hvr-underline-from-left"
+                   *ngFor="let data2 of storeList2"
+                   style="padding:10px; cursor: pointer; margin-bottom:5px;"
+                   routerLink="/user/list/{{data2.list_config_id}}/{{data2.title.split(' ').join('-')+'-'+data2.country}}">
+                <div style="font-size: 14px;">{{data2.title}}</div>
+                <button class="btn-buy">
+                  <i class="fa fa-dollar"></i>&nbsp;{{data2.price}} / Buy
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row contact_scroll">
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="front-lead" style="color: #d03772;">GET IN <span style="color: #333333;">TOUCH</span></div>
+          </div>
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mb-5" id="contact">
+            <div id="message" class="alert alert-success successContactMsg"
+                 style="display: none;">
+              Thanks for contact us, we will get back to you soon
+            </div>
+            <form #contactform="ngForm" class="contactform" novalidate id="contactform">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                  <div class="form-group">
+                    <input type="text"
+                           [(ngModel)]="contactModel.contact_full_name"
+                           #contact_full_name="ngModel"
+                           name="contact_full_name"
+                           placeholder="Your Name"
+                           class="input-style"
+                           required>
+                  </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                  <input type="text"
+                         [(ngModel)]="contactModel.contact_email_id"
+                         #contact_email_id="ngModel"
+                         name="contact_email_id"
+                         pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$"
+                         placeholder="Your Email"
+                         class="input-style"
+                         required>
+                </div>
+                <div class="col-md-12">
+                  <input type="text"
+                         [(ngModel)]="contactModel.contact_phone"
+                         #contact_phone="ngModel"
+                         name="contact_phone"
+                         placeholder="Phone"
+                         class="input-style"
+                         required
+                         maxlength="14"
+                         onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+                </div>
+                <div class="col-md-12">
+                  <input type="text"
+                         [(ngModel)]="contactModel.contact_subject"
+                         #contact_subject="ngModel"
+                         name="contact_subject"
+                         placeholder="Subject"
+                         class="input-style" maxlength="255">
+                </div>
+                <div class="col-md-12">
+                <textarea [(ngModel)]="contactModel.contact_message"
+                          #contact_message="ngModel"
+                          name="contact_message"
+                          placeholder="Your Message"
+                          class="input-style"
+                          maxlength="500"></textarea>
+                </div>
+                <div class="col-md-12">
+                  <input type="submit"
+                         (click)="submitContactForm(contactModel)"
+                         value="Submit" id="submit"
+                         class="submit"
+                         [disabled]="contactform.invalid">
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--<div class="col-md-12 col-sm-12 text-center" style="background: #ffffff;">
+    <hr/>
+    <h2 style="color: #507282; text-align: center;">
+      Find, Track, and Analyze the Companies you care about.
+    </h2>
+    <img src="{{assetsPath}}images/people_search.png"
+         style="box-shadow: #4f4a41 3px 6px 33px -3px; width: 50%; border-radius: 4px;"/>
+    <h4>
+      Millions of professionals, just a search away.
+      Discover your next business connection now.
+    </h4>
+    <hr/>
+  </div>-->
+
+  <div class="container-fluid bg-white">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <h2 style="color: #333; text-align: center; margin-bottom:30px; margin-top:30px;">OUR <span style="color: #d03772;">SERVICES</span></h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-12 mb-5"></div>
+        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12 mb-5">
+          <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+              <div class="circle-icon">
+                <i class="fa fa-users"></i>
+              </div>
+            </div>
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+              <div class="services-lead">LEAD GENERATION</div>
+              <ul class="services-list">
+                <li>Inbound Marketing</li>
+                <li>B2B Appointment Setting</li>
+                <li>Key Account Marketing</li>
+                <li>Lead Nurturing</li>
+              </ul>
+              <div>
+                <a href="https://www.sellosphere.com/lead-generation" target="_blank" mat-raised-button
+                   style="text-decoration: none;">Read More</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12 mb-5">
+          <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+              <div class="circle-icon">
+                <i class="fa fa-edit"></i>
+              </div>
+            </div>
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+              <div class="services-lead">CONTENT MARKETING</div>
+              <ul class="services-list">
+                <li>​Content Creation Strategy</li>
+                <li>Ideation & Topic Development</li>
+                <li>Editorial Content Creation</li>
+                <li>Reporting & Analysis</li>
+              </ul>
+              <div>
+                <a href="https://www.sellosphere.com/content-marketing" target="_blank" mat-raised-button
+                   style="text-decoration: none;">Read More</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-12 mb-5"></div>
+      </div>
+      <div class="row">
+        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-12 mb-5"></div>
+
+        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12 mb-5">
+          <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+              <div class="circle-icon">
+                <i class="fa fa-bar-chart"></i>
+              </div>
+            </div>
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+              <div class="services-lead">DATA RESEARCH</div>
+              <div class="services-list">
+                ​Collect, cleanse, enrich, append and verify data.
+                Get the best data research done for your company.
+              </div>
+              <div>
+                <a href="https://www.sellosphere.com/data-enrichment" target="_blank" mat-raised-button
+                   style="text-decoration: none;">Read More</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12 mb-5">
+          <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+              <div class="circle-icon">
+                <i class="fa fa-th"></i>
+              </div>
+            </div>
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+              <div class="services-lead">SAAS SALES &amp; MARKETING</div>
+              <ul class="services-list">
+                <li>Take a strategic approach to marketing</li>
+                <li>Optimize your marketing budget</li>
+                <li>Benefit from our marketing expertise</li>
+                <li>Pay only for services you need</li>
+              </ul>
+              <div>
+                <a href="https://www.sellosphere.com/saas-marketing" target="_blank" mat-raised-button
+                   style="text-decoration: none;">Read More</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-12 mb-5"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-user-footer></app-user-footer>
